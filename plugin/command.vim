@@ -5,12 +5,15 @@ if !s:enter
 endif
 "}}}
 
-command SctCompileFromCursorLine : call cplane#sct#CompileTestCaseFromCursorLine()
-command SctReCompileLastOne : call cplane#sct#ReCompilationBackupedTestCase()
-command SctPrintLastCompilationCommand : call cplane#sct#PrintCompilationLastCommand()
+command SCTCompileFromCursorLine : call cplane#sct#CompileTestCaseFromCursorLine()
+command SCTCompileReRunLastCommand : call cplane#sct#ReCompilationBackupedTestCase()
+command SCTCompilePrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
 
-command SctCompileAndRunFromCursorLine : call cplane#sct#SctCompileAndRunFromCursorLine()
-command SctReCompileAndRunLastOne : call cplane#sct#ReCompilationAndRunBackupedTestCase()
-command SctPrintLastCompilationAndRunCommand : call cplane#sct#PrintCompilationLastCommand()
+command SCTBuildAndRunFromCursorLine : call cplane#sct#SctCompileAndRunFromCursorLine()
+command SCTBuildAndRunReRunLastCommand : call cplane#sct#ReCompilationAndRunBackupedTestCase()
+command SCTBuildAndRunPrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
 
-
+" TODO fill and provide method / command to change variant
+"command SCTRunFromCursorLine : call 
+"command SCTRunReRunLastCommand : call
+"command SCTRunPrintLastCommand : call 
