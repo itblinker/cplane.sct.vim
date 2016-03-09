@@ -5,4 +5,5 @@ if !s:enter
 endif
 "}}}
 
-
+command SctCompileFromCursorLine : call cplane#sct#CompileTestCaseFromCursorLine()
+command SctReCompileLastOne : call cplane#sct#ReCompilationBackupedTestCase()
