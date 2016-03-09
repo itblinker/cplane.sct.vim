@@ -19,9 +19,14 @@ endfunction
 
 function cplane#sct#private#Compile()
     call cplane#sct#private#BackupCompilationCommand()
-    call cplane#sct#private#LanuchBackupedCompilationCommand()
+    call cplane#sct#private#LaunchBackupedCompilationCommand()
 endfunction
 
+
+function cplane#sct#private#CompileAndRun()
+    call cplane#sct#private#BackupCompilationAndRunCommand()
+    call cplane#sct#private#LaunchBackupedCompilationAndRunCommand()
+endfunction
 
 
 function cplane#sct#private#GetTestCaseName()
@@ -37,8 +42,25 @@ endfunction
 
 
 
+function cplane#sct#private#GetCommonCommand()
+    return 'Dispatch '.cplane#sct#private#GetBin().' -tcs '.cplane#sct#private#GetTestCaseName().g:cplane_sct_common_parameters_subcommands.cplane#sct#private#GetVariantSubcommand()
+endfunction
+
+
+
 function cplane#sct#private#GetCompilationCommand()
-    return 'Dispatch '.cplane#sct#private#GetBin().' -tcs '.cplane#sct#private#GetTestCaseName().g:cplane_sct_compilation_parameters_subcommand.cplane#sct#private#GetVariantSubcommand()
+    return cplane#sct#private#GetCommonCommand().g:cplane_sct_compilation_parameters_subcommand
+endfunction
+
+
+function cplane#sct#private#GetCompilationAndRunCommand()
+    return cplane#sct#private#GetCommonCommand().g:cplane_sct_run_parameters_subcommand.cplane#sct#private#GetSubcommandForDestinationLogDir()
+endfunction
+
+
+
+function cplane#sct#private#GetSubcommandForDestinationLogDir()
+    return ' -logdir '.cplane#sct#private#GetLogsDirectory()
 endfunction
 
 
@@ -55,7 +77,13 @@ endfunction
 
 
 
-function cplane#sct#private#LanuchBackupedCompilationCommand()
+function cplane#sct#private#BackupCompilationAndRunCommand()
+    let g:cplane#sct#cache#last#CompilationAndRunCommand = cplane#sct#private#GetCompilationAndRunCommand()
+endfunction
+
+
+
+function cplane#sct#private#LaunchBackupedCompilationCommand()
     if(len(g:cplane#sct#cache#last#CompilationCommand))
         execute 'silent! '.g:cplane#sct#cache#last#CompilationCommand
     else
@@ -63,3 +91,12 @@ function cplane#sct#private#LanuchBackupedCompilationCommand()
     endif
 endfunction
 
+
+
+function cplane#sct#private#LaunchBackupedCompilationAndRunCommand()
+    if(len(g:cplane#sct#cache#last#CompilationAndRunCommand))
+        execute 'silent! '.g:cplane#sct#cache#last#CompilationAndRunCommand
+    else
+        echo 'there isn''t any valid last compilation command'
+    endif
+endfunction

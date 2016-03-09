@@ -12,5 +12,6 @@ let g:cplane_sct_logs_dir_relative_path = '/logs/SCTs/'
 let g:cplane_sct_variant_in_use = 'fsmr3'
 let g:cplane_sct_variants_supported = ['fsmr3', 'fsmr4', 'fzc', 'fzm', 'tddfsmr3', 'tddfsmr4', 'tddfzc', 'tddfzm' ]
 
-let g:cplane_sct_compilation_parameters_subcommand = ' -basket ALL -k3conly'
-let g:cplane_sct_run_parameters_subcommand = ' -basket ALL -keeplogs -keepk3log'
+let g:cplane_sct_common_parameters_subcommands = ' -basket ALL'
+let g:cplane_sct_compilation_parameters_subcommand = ' -k3conly'
+let g:cplane_sct_run_parameters_subcommand = ' -keeplogs -keepk3log'

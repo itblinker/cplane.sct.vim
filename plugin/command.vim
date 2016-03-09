@@ -7,3 +7,10 @@ endif
 
 command SctCompileFromCursorLine : call cplane#sct#CompileTestCaseFromCursorLine()
 command SctReCompileLastOne : call cplane#sct#ReCompilationBackupedTestCase()
+command SctPrintLastCompilationCommand : call cplane#sct#PrintCompilationLastCommand()
+
+command SctCompileAndRunFromCursorLine : call cplane#sct#SctCompileAndRunFromCursorLine()
+command SctReCompileAndRunLastOne : call cplane#sct#ReCompilationAndRunBackupedTestCase()
+command SctPrintLastCompilationAndRunCommand : call cplane#sct#PrintCompilationLastCommand()
+
+
