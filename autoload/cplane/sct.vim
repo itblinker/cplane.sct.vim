@@ -43,3 +43,17 @@ function cplane#sct#PrintCompilationAndRunLastCommand()
     echo g:cplane#sct#cache#last#CompilationAndRunCommand
 endfunction
 
+
+
+function cplane#sct#SctRunFromCursorLine()
+    let l:splittedCurrentLine = split(getline('.'))
+
+    if( (len(l:splittedCurrentLine) >= 2) && (l:splittedCurrentLine[0] == 'testcase') )
+        call cplane#sct#private#Run()
+    else
+        echo 'TTCN Compilation cann''t be started - put cursor on line with testcase name'
+    endif
+endfunction
+
+
+

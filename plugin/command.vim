@@ -14,6 +14,12 @@ command SCTBuildAndRunReRunLastCommand : call cplane#sct#ReCompilationAndRunBack
 command SCTBuildAndRunPrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
 
 " TODO fill and provide method / command to change variant
+" run / compile should run my filtering script
+" caching only testcase name
 "command SCTRunFromCursorLine : call 
 "command SCTRunReRunLastCommand : call
 "command SCTRunPrintLastCommand : call 
+"
+"TODO: coalescence run: no logs, toggle detector, config from variant, 
+" coalescence (compile for all architecture and run coalescence for all of
+" them)

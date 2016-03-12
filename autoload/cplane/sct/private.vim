@@ -29,6 +29,12 @@ function cplane#sct#private#CompileAndRun()
 endfunction
 
 
+function cplane#sct#private#Run()
+    call cplane#sct#private#BackupRunCommand()
+    call cplane#sct#private#LaunchBackupedRunCommand()
+endfunction
+
+
 function cplane#sct#private#GetTestCaseName()
     let l:testCaseNameFunction = split(getline('.'))[1]
     return strpart(l:testCaseNameFunction, 0, len(l:testCaseNameFunction) - 2)
@@ -53,10 +59,19 @@ function cplane#sct#private#GetCompilationCommand()
 endfunction
 
 
-function cplane#sct#private#GetCompilationAndRunCommand()
-    return cplane#sct#private#GetCommonCommand().g:cplane_sct_run_parameters_subcommand.cplane#sct#private#GetSubcommandForDestinationLogDir()
+function cplane#sct#private#GetRunSubCommand()
+    return cplane#sct#private#GetCommonCommand().cplane#sct#private#GetSubcommandForDestinationLogDir()
 endfunction
 
+
+function cplane#sct#private#GetCompilationAndRunCommand()
+    return cplane#sct#private#GetRunSubCommand().g:cplane_sct_compile_and_run_parameters_subcommand
+endfunction
+
+
+function cplane#sct#private#GetRunOnlyCommand()
+    return cplane#sct#private#GetRunSubCommand().g:cplane_sct_run_only_parameters_subcommand
+endfunction
 
 
 function cplane#sct#private#GetSubcommandForDestinationLogDir()
