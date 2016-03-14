@@ -1,3 +1,19 @@
+let s:components = [
+            \ {'name': g:rrom, 'dir_key': 'RROM'},
+            \ {'name': g:uec, 'dir_key': 'UEC'},
+            \ {'name': g:enbc, 'dir_key': 'ENBC'},
+            \ {'name': g:cellc, 'dir_key': 'CELLC'},
+            \ {'name': g:tupc, 'dir_key': 'TUPC'},
+            \ {'name': g:mcec, 'dir_key': 'MCEC'},
+            \ {'name': g:common, 'dir_key': 'Common'}
+            \ ]
+
+"function cplane#sct#GetComponentName()
+    "echo 'component name is '.cplane#GetComponentName(s:components)
+    "return cplane#GetComponentName(s:components)
+"endfunction
+
+
 function cplane#sct#CompileTestCaseFromCursorLine()
     let l:splittedCurrentLine = split(getline('.'))
 

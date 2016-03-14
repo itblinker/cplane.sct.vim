@@ -115,3 +115,14 @@ function cplane#sct#private#LaunchBackupedCompilationAndRunCommand()
         echo 'there isn''t any valid last compilation command'
     endif
 endfunction
+
+
+function cplane#sct#private#UpdateTags()
+    echomsg 'update from TTCN'
+    let l:path = maktaba#path#Split(expand('%:p:h'))
+    "for item in l:path
+endfunction
+
+
+
+

@@ -1,4 +1,6 @@
-let s:sacks = [getcwd().'/lteDo']
+let s:sacks = [
+            \ getcwd().'/lteDo'
+            \ ]
 
 let s:parameters = {
             \ g:rrom   : [getcwd().'/C_Application/SC_RROM'],
@@ -10,6 +12,9 @@ let s:parameters = {
             \ g:lom    : [getcwd().'/C_Application/SC_LOM'],
             \ g:common : [getcwd().'/C_Application/SC_Common']
             \ }
+
+let s:find_arg = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
+let s:tempFileName = 'gtags.sources'
 
 "{{{ One-Time Path Validation
     "{{{ validation methods
@@ -36,9 +41,13 @@ call s:validateParameters()
 
 
 function cplane#cpp#tags#Do(p_component)
-    echo 'TAGGING on '.a:p_component
 
-    for path in s:getListOfPaths(a:p_component)
+    let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:sacks
+    for path in l:paths
+        execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileName
     endfor
+
+    execute 'Start -wait=''error'' gtags -f '.s:tempFileName
+    execute 'Start -wait=''error'' rm -f '.s:tempFileName
 endfunction
 

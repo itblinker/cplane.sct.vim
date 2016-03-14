@@ -13,6 +13,12 @@ command SCTBuildAndRunFromCursorLine : call cplane#sct#SctCompileAndRunFromCurso
 command SCTBuildAndRunReRunLastCommand : call cplane#sct#ReCompilationAndRunBackupedTestCase()
 command SCTBuildAndRunPrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
 
+command UpSack : execute 'Start make upSack'
+command ReTagCurrentCompoent : call cplane#cpp#tags#Do(cplane#cpp#component#GetNameFromBuffer())
+
+
+
+
 " TODO fill and provide method / command to change variant
 " run / compile should run my filtering script
 " caching only testcase name
