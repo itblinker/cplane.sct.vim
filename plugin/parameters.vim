@@ -13,3 +13,8 @@ let g:tupc = 'tupc'
 let g:mcec = 'mcec'
 let g:lom = 'lom'
 let g:common = 'common'
+
+let g:fsmr3_fdd = 'fsmr3'
+let g:fsmr4_fdd = 'fsmr4'
+let g:fsmr3_tdd = 'tddfsmr3'
+let g:fsmr4_tdd = 'tddrsmr4'

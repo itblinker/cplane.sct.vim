@@ -5,5 +5,5 @@ if !s:enter
 endif
 "}}}
 
-autocmd BufEnter *.cpp,*.hpp,*.c,*.h :call cplane#cpp#tags#UpdateIfNeeded()
-autocmd BufEnter *.ttcn,*.ttcn3      :call cplane#sct#tags#UpdateIfNeeded()
+"autocmd BufEnter *.cpp,*.hpp,*.c,*.h :call cplane#cpp#tags#UpdateIfNeeded()
+"autocmd BufEnter *.ttcn,*.ttcn3      :call cplane#sct#tags#UpdateIfNeeded()
