@@ -9,7 +9,7 @@ let s:components = [
             \ {'name': g:lom, 'key_dir': 'SC_LOM'}
             \ ]
 
-
+"{{{ functions
 function cplane#cpp#component#IsSupported(p_name)
     for item in s:components
         if (a:p_name ==# item.name)
@@ -64,4 +64,4 @@ function cplane#cpp#component#IsCacheHasNotBeenInitialized()
         return 0
     endif
 endfunction
-
+"}}}
