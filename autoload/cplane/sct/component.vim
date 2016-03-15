@@ -2,7 +2,7 @@ let s:components = [
             \ {'name': g:rrom, 'key_dir': 'RROM'},
             \ {'name': g:uec, 'key_dir': 'UEC'},
             \ {'name': g:enbc, 'key_dir': 'ENBC'},
-            \ {'name': g:cellc, 'key_dir': 'C_CELLC'},
+            \ {'name': g:cellc, 'key_dir': 'CELLC'},
             \ {'name': g:tupc, 'key_dir': 'TUPC'},
             \ {'name': g:mcec, 'key_dir': 'MCEC'},
             \ {'name': g:common, 'key_dir': 'Common'}
