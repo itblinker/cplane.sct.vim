@@ -1,15 +1,15 @@
 let s:component_sack = {
-            \ g:rrom  : 'RROM'  : [getcwd().'/lteDo/gencode/RROM'],
-            \ g:uec   : 'UEC'   : [getcwd().'/lteDo/gencode/UEC'],
-            \ g:enbc  : 'ENBC'  : [getcwd().'/lteDo/gencode/ENBC'],
-            \ g:cellc : 'CELLC' : [getcwd().'/lteDo/gencode/CELLC'],
-            \ g:tupc  : 'TUPC'  : [getcwd().'/lteDo/gencode/TUPC'],
-            \ g:mcec  : 'MCEC'  : [getcwd().'/lteDo/gencode/MCEC']
+            \ g:rrom  : [getcwd().'/lteDo/gencode/RROM'],
+            \ g:uec   : [getcwd().'/lteDo/gencode/UEC'],
+            \ g:enbc  : [getcwd().'/lteDo/gencode/ENBC'],
+            \ g:cellc : [getcwd().'/lteDo/gencode/CELLC'],
+            \ g:tupc  : [getcwd().'/lteDo/gencode/TUPC'],
+            \ g:mcec  : [getcwd().'/lteDo/gencode/MCEC']
             \ }
 
 let s:common_sacks = [
-            \ getcwd().'./lteDo/gencode/constants',
-            \ getcwd().'./C_Test/cplane_k3/src/Common'
+            \ getcwd().'/lteDo/gencode/constants',
+            \ getcwd().'/C_Test/cplane_k3/src/Common'
             \ ]
 
 let s:parameters = {
@@ -28,8 +28,12 @@ let s:tempFileName = '.cache.ctags.sct.sources'
 "{{{ One-Time Path Validation
     "{{{ validation methods
 
-    function s:getListOfPaths(p_component)
-        return s:parameters[a:p_component] + s:component_sack[a:p_component]
+    function s:getListOfPathsForComponent(p_component)
+        if (a:p_component ==# g:common)
+            return s:parameters[g:common]
+        else
+            return s:parameters[a:p_component] + s:component_sack[a:p_component]
+        endif
     endfunction
 
 
@@ -47,7 +51,7 @@ let s:tempFileName = '.cache.ctags.sct.sources'
 
     function s:validatePaths()
         for key in keys(s:parameters)
-            call s:validateListOfPaths(s:getListOfPaths(key))
+            call s:validateListOfPaths(s:getListOfPathsForComponent(key))
         endfor
 
         call s:validateListOfPaths(s:common_sacks)
@@ -60,21 +64,16 @@ call s:validatePaths()
 
 function cplane#sct#tags#Do(p_component)
 
-    let l:paths = []
-    if (a:p_component ==# g:common)
-        let l:paths = s:getListOfPaths(g:common) + s:common_sacks
-    else
-        let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:common_sacks
-    endif
+    let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
 
-    for path in l:paths
+    for path in l:listOfAllNeededPaths
         execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileName
     endfor
 
-    "execute 'Start -wait=''error'' ctags-with-ttcn '.s:tempFileName
-    execute 'Start -wait=''error'' rm -f '.s:tempFileName
+    ""execute 'Start -wait=''error'' ctags-with-ttcn '.s:tempFileName
+    "execute 'Start -wait=''error'' rm -f '.s:tempFileName
 
-    "TODO : clear older tags & setup new ones
+    ""TODO : clear older tags & setup new ones
 
 endfunction
 

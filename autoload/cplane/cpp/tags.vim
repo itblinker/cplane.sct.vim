@@ -19,8 +19,12 @@ let s:tempFileName = '.cache.gtags.cpp.sources'
 "{{{ One-Time Path Validation
     "{{{ validation methods
 
-    function s:getListOfPaths(p_component)
-        return s:parameters[a:p_component]
+    function s:getListOfPathsForComponent(p_component)
+        if (a:p_component ==# g:common)
+            return s:parameters[g:common]
+        else
+            return s:parameters[a:p_component] + s:parameters[g:common]
+        endif
     endfunction
 
 
@@ -38,7 +42,7 @@ let s:tempFileName = '.cache.gtags.cpp.sources'
 
     function s:validatePaths()
         for key in keys(s:parameters)
-            call s:validateListOfPaths(s:getListOfPaths(key))
+            call s:validateListOfPaths(s:getListOfPathsForComponent(key))
         endfor
 
         call s:validateListOfPaths(s:common_sacks)
@@ -51,14 +55,9 @@ call s:validatePaths()
 
 function cplane#cpp#tags#Do(p_component)
 
-    let l:paths = []
-    if (a:p_component ==# g:common)
-        let l:paths = s:getListOfPaths(g:common) + s:common_sacks
-    else
-        let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:common_sacks
-    endif
+    let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
 
-    for path in l:paths
+    for path in l:listOfAllNeededPaths
         execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileName
     endfor
 

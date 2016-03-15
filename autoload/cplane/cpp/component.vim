@@ -10,7 +10,6 @@ let s:components = [
             \ ]
 
 
-
 function cplane#cpp#component#IsSupported(p_name)
     for item in s:components
         if (a:p_name ==# item.name)
