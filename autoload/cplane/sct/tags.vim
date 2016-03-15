@@ -23,7 +23,8 @@ let s:parameters = {
             \ }
 
 let s:find_arg = ' \( ! -regex ''.*/\..*'' \) -type f -name ''*.ttcn3'' '
-let s:tempFileName = '.cache.ctags.sct.sources'
+let s:tempFileToStoreSources = '.cache.ctags.sct.sources'
+let s:ctagFile = getcwd().'/.ttcn3.ctags'
 
 "{{{ One-Time Path Validation
     "{{{ validation methods
@@ -67,13 +68,12 @@ function cplane#sct#tags#Do(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
 
     for path in l:listOfAllNeededPaths
-        execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileName
+        execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
     endfor
 
-    ""execute 'Start -wait=''error'' ctags-with-ttcn '.s:tempFileName
-    execute 'Start -wait=''error'' rm -f '.s:tempFileName
-
-    ""TODO : clear older tags & setup new ones
+    execute 'Start -wait=''error'' ctags-with-ttcn -f '.s:ctagFile.' --language-force=ttcn -L '.s:tempFileToStoreSources
+    execute 'Start -wait=''error'' rm -f '.s:tempFileToStoreSources
+    execute 'set tag='.s:ctagFile
 
 endfunction
 

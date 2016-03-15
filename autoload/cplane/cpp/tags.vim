@@ -14,7 +14,7 @@ let s:parameters = {
             \ }
 
 let s:find_arg = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
-let s:tempFileName = '.cache.gtags.cpp.sources'
+let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
 
 "{{{ One-Time Path Validation
     "{{{ validation methods
@@ -58,11 +58,11 @@ function cplane#cpp#tags#Do(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
 
     for path in l:listOfAllNeededPaths
-        execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileName
+        execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
     endfor
 
-    execute 'Start -wait=''error'' gtags -f '.s:tempFileName
-    execute 'Start -wait=''error'' rm -f '.s:tempFileName
+    execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
+    execute 'Start -wait=''error'' rm -f '.s:tempFileToStoreSources
 endfunction
 
 
