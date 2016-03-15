@@ -56,21 +56,24 @@ call s:validatePaths()
 
 function cplane#cpp#tags#Do(p_component)
 
-    call cplane#cpp#tags#RemovePreviousListFile()
+    call cplane#cpp#tags#RemovePreviousListOfFilesToIndex()
+    call cplane#cpp#tags#CreateListOfFilesToIndex(a:p_component)
 
+    execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
+endfunction
+
+
+function cplane#cpp#tags#CreateListOfFilesToIndex(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
     for path in l:listOfAllNeededPaths
         execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
     endfor
-
-    execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
-    execute 'Start -wait=''error'' rm -f '.s:tempFileToStoreSources
 endfunction
 
 
-function cplane#cpp#tags#RemovePreviousListFile()
+function cplane#cpp#tags#RemovePreviousListOfFilesToIndex()
     if filereadable(s:tempFileToStoreSources)
-        execute 'Start -wait rm -f'.s:tempFileToStoreSources
+        execute 'Start -wait rm -f '.s:tempFileToStoreSources
     endif
 endfunction
 
