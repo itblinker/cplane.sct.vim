@@ -1,4 +1,4 @@
-let s:sacks = [
+let s:common_sacks = [
             \ getcwd().'/lteDo'
             \ ]
 
@@ -14,27 +14,38 @@ let s:parameters = {
             \ }
 
 let s:find_arg = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
-let s:tempFileName = '.cache.gtags.sources'
+let s:tempFileName = '.cache.gtags.cpp.sources'
 
 "{{{ One-Time Path Validation
     "{{{ validation methods
+
     function s:getListOfPaths(p_component)
         return s:parameters[a:p_component]
     endfunction
 
+
+    function s:validatePath(p_path)
+        call maktaba#ensure#IsDirectory(a:p_path)
+    endfunction
+
+
     function s:validateListOfPaths(p_listOfPaths)
         for path in a:p_listOfPaths
-            call maktaba#ensure#IsDirectory(path)
+            call s:validatePath(path)
         endfor
     endfunction
 
-    function s:validateParameters()
+
+    function s:validatePaths()
         for key in keys(s:parameters)
             call s:validateListOfPaths(s:getListOfPaths(key))
         endfor
+
+        call s:validateListOfPaths(s:common_sacks)
     endfunction
+
     "}}}
-call s:validateParameters()
+call s:validatePaths()
 "}}}
 
 
@@ -42,13 +53,9 @@ function cplane#cpp#tags#Do(p_component)
 
     let l:paths = []
     if (a:p_component ==# g:common)
-        let l:paths = s:getListOfPaths(g:common) + s:sacks
+        let l:paths = s:getListOfPaths(g:common) + s:common_sacks
     else
-        let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:sacks
-    endif
-
-    if(filereadable(s:tempFileName))
-        execute 'Start -wait=''error'' rm -f '.s:tempFileName
+        let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:common_sacks
     endif
 
     for path in l:paths
@@ -56,6 +63,7 @@ function cplane#cpp#tags#Do(p_component)
     endfor
 
     execute 'Start -wait=''error'' gtags -f '.s:tempFileName
+    execute 'Start -wait=''error'' rm -f '.s:tempFileName
 endfunction
 
 
@@ -67,5 +75,27 @@ function cplane#cpp#tags#Update()
     catch
         call maktaba#error#Shout('cplane.vim: cann''t tag the component resolved as %s', l:currentOne)
     endtry
+endfunction
+
+
+function cplane#cpp#tags#UpdateIfNeeded()
+    let l:newOne = cplane#cpp#component#GetNameFromBuffer()
+    if (l:newOne ==# g:cplane#component#None)
+        return
+    endif
+
+    if (cplane#cpp#component#IsCacheOutdated(l:newOne))
+        if cplane#cpp#component#IsCacheHasNotBeenInitialized()
+            call cplane#cpp#component#Cache(l:newOne)
+            call cplane#cpp#tags#Do(l:newOne)
+            return
+        endif
+
+        if ! (l:newOne ==# g:common)
+            call cplane#cpp#component#Cache(l:newOne)
+            call cplane#cpp#tags#Do(l:newOne)
+        endif
+    endif
+
 endfunction
 

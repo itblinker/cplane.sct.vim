@@ -65,6 +65,3 @@ function cplane#sct#SctRunFromCursorLine()
         echo 'TTCN Compilation cann''t be started - put cursor on line with testcase name'
     endif
 endfunction
-
-
-

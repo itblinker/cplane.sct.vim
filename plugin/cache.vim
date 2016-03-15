@@ -6,5 +6,7 @@ endif
 "}}}
 
 let g:cplane#component#None = ''
+
 let g:cplane#cpp#cache#component = g:cplane#component#None
+let g:cplane#sct#cache#component = g:cplane#component#None
 
