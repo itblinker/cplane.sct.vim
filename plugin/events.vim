@@ -6,5 +6,5 @@ endif
 "}}}
 
 "autocmd BufEnter *.ttcn3 :call cplane#sct#
-autocmd BufEnter *.cpp,*.hpp,*.c,*.h :call cplane#cpp#UpdateComponent()
+autocmd BufEnter *.cpp,*.hpp,*.c,*.h :call cplane#cpp#component#UpdateCacheAndRetagIfNeedeed()
 

@@ -13,8 +13,8 @@ command SCTBuildAndRunFromCursorLine : call cplane#sct#SctCompileAndRunFromCurso
 command SCTBuildAndRunReRunLastCommand : call cplane#sct#ReCompilationAndRunBackupedTestCase()
 command SCTBuildAndRunPrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
 
-command UpSack : execute 'Start make upSack'
-command ReTagCurrentCompoent : call cplane#cpp#tags#Do(cplane#cpp#component#GetNameFromBuffer())
+command UpSack : execute 'Start -wait=''error'' make upSack'
+command ReTagCppForCurrentComponent : call cplane#cpp#tags#Update()
 
 
 
@@ -22,10 +22,10 @@ command ReTagCurrentCompoent : call cplane#cpp#tags#Do(cplane#cpp#component#GetN
 " TODO fill and provide method / command to change variant
 " run / compile should run my filtering script
 " caching only testcase name
-"command SCTRunFromCursorLine : call 
+"command SCTRunFromCursorLine : call
 "command SCTRunReRunLastCommand : call
-"command SCTRunPrintLastCommand : call 
+"command SCTRunPrintLastCommand : call
 "
-"TODO: coalescence run: no logs, toggle detector, config from variant, 
+"TODO: coalescence run: no logs, toggle detector, config from variant,
 " coalescence (compile for all architecture and run coalescence for all of
 " them)

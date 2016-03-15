@@ -14,7 +14,7 @@ let s:parameters = {
             \ }
 
 let s:find_arg = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
-let s:tempFileName = 'gtags.sources'
+let s:tempFileName = '.cache.gtags.sources'
 
 "{{{ One-Time Path Validation
     "{{{ validation methods
@@ -29,9 +29,7 @@ let s:tempFileName = 'gtags.sources'
     endfunction
 
     function s:validateParameters()
-        let l:keys = keys(s:parameters)
-
-        for key in l:keys
+        for key in keys(s:parameters)
             call s:validateListOfPaths(s:getListOfPaths(key))
         endfor
     endfunction
@@ -42,12 +40,32 @@ call s:validateParameters()
 
 function cplane#cpp#tags#Do(p_component)
 
-    let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:sacks
+    let l:paths = []
+    if (a:p_component ==# g:common)
+        let l:paths = s:getListOfPaths(g:common) + s:sacks
+    else
+        let l:paths = s:getListOfPaths(a:p_component) + s:getListOfPaths(g:common) + s:sacks
+    endif
+
+    if(filereadable(s:tempFileName))
+        execute 'Start -wait=''error'' rm -f '.s:tempFileName
+    endif
+
     for path in l:paths
         execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileName
     endfor
 
     execute 'Start -wait=''error'' gtags -f '.s:tempFileName
-    execute 'Start -wait=''error'' rm -f '.s:tempFileName
+endfunction
+
+
+function cplane#cpp#tags#Update()
+    let l:currentOne = cplane#cpp#component#GetNameFromBuffer()
+    try
+        call maktaba#ensure#IsTrue(cplane#cpp#component#IsSupported(l:currentOne))
+        call cplane#cpp#tags#Do(l:currentOne)
+    catch
+        call maktaba#error#Shout('cplane.vim: cann''t tag the component resolved as %s', l:currentOne)
+    endtry
 endfunction
 

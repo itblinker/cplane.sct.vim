@@ -9,6 +9,28 @@ let s:components = [
             \ {'name': g:lom, 'dir': 'SC_LOM'}
             \ ]
 
+function cplane#cpp#component#UpdateCacheAndRetagIfNeedeed()
+    let l:newOne = cplane#cpp#component#GetNameFromBuffer()
+    if (l:newOne ==# g:cplane#component#None)
+        return
+    endif
+
+    if (cplane#cpp#component#IsCacheOutdated(l:newOne))
+        if cplane#cpp#component#IsCacheHasNotBeenInitialized()
+            call cplane#cpp#component#Cache(l:newOne)
+            call cplane#cpp#tags#Do(l:newOne)
+            return
+        endif
+
+        if ! (l:newOne ==# g:common)
+            call cplane#cpp#component#Cache(l:newOne)
+            call cplane#cpp#tags#Do(l:newOne)
+        endif
+    endif
+
+endfunction
+
+
 function cplane#cpp#component#IsSupported(p_name)
     for item in s:components
         if (a:p_name ==# item.name)
@@ -17,11 +39,6 @@ function cplane#cpp#component#IsSupported(p_name)
     endfor
 
     return 0
-endfunction
-
-
-function cplane#cpp#component#GetCached()
-    return g:cplane#cpp#cache#component
 endfunction
 
 
@@ -52,17 +69,6 @@ function cplane#cpp#component#GetNameFromBuffer()
 endfunction
 
 
-
-function cplane#cpp#component#IsCommonCurrentlyBeingCached()
-    if (cplane#cpp#cache#component ==# g:common)
-        return 1
-    else
-        return 0
-    endif
-endfunction
-
-
-
 function cplane#cpp#component#IsCacheOutdated(p_component)
     if ! (a:p_component ==# g:cplane#cpp#cache#component)
         return 1
@@ -70,7 +76,6 @@ function cplane#cpp#component#IsCacheOutdated(p_component)
         return 0
     endif
 endfunction
-
 
 
 function cplane#cpp#component#IsCacheHasNotBeenInitialized()
@@ -81,12 +86,3 @@ function cplane#cpp#component#IsCacheHasNotBeenInitialized()
     endif
 endfunction
 
-
-function cplane#cpp#component#EchomsgCurrentComponent()
-    if (g:cplane#cpp#cache#component ==# g:cplane#component#None)
-        echomsg 'current CPP component is None'
-        return
-    else
-        echomsg 'current CPP compoentns is '.g:cplane#component#None
-    endif
-endfunction

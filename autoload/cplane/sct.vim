@@ -8,11 +8,6 @@ let s:components = [
             \ {'name': g:common, 'dir_key': 'Common'}
             \ ]
 
-"function cplane#sct#GetComponentName()
-    "echo 'component name is '.cplane#GetComponentName(s:components)
-    "return cplane#GetComponentName(s:components)
-"endfunction
-
 
 function cplane#sct#CompileTestCaseFromCursorLine()
     let l:splittedCurrentLine = split(getline('.'))
