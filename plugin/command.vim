@@ -5,16 +5,13 @@ if !s:enter
 endif
 "}}}
 
-command SCTCompileFromCursorLine : call cplane#sct#CompileTestCaseFromCursorLine()
-command SCTCompileReRunLastCommand : call cplane#sct#ReCompilationBackupedTestCase()
-command SCTCompilePrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
-
-command SCTBuildAndRunFromCursorLine : call cplane#sct#SctCompileAndRunFromCursorLine()
-command SCTBuildAndRunReRunLastCommand : call cplane#sct#ReCompilationAndRunBackupedTestCase()
-command SCTBuildAndRunPrintLastCommand : call cplane#sct#PrintCompilationLastCommand()
+command SctCompileFromCursorLine :call cplane#sct#testcase#CompileFromCursorLine()
+command SctRunFromCursorLine :call cplane#sct#testcase#BuildAndRunFromCursorLine()
 
 command UpSack : execute 'Start -wait=''error'' make upSack'
 command ReTagCppForCurrentComponent : call cplane#cpp#tags#Update()
+command ReTagTtcnForCurrentComponent : call cplane#sct#tags#Update()
+
 
 
 

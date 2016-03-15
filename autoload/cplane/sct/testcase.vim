@@ -13,7 +13,6 @@ let s:logs_top_dir = getcwd().'/logs/SCTs'
 let s:common_flags = ' -basket ALL '
 let s:compilation_flags = ' -k3conly '.s:common_flags
 let s:build_flags = ' -keeplogs -keepk3log '.s:common_flags
-let s:run_flags = ' -keeplogs -keepk3log -noappbuild '.s:common_flags
 
 
 function s:getPathToLogsTopDir(p_variant)
@@ -41,18 +40,26 @@ function s:getTestCaseFromCursorLine()
 endfunction
 
 
+function s:getCompilationFlags()
+    return s:compilation_flags.'-logdir '.s:getPathToLogsTopDir(g:cplane#cache#variant)
+endfunction
+
+
+function s:getBuildAndRunFlags()
+    return s:build_flags.'-logdir '.s:getPathToLogsTopDir(g:cplane#cache#variant)
+endfunction
+
+
 function s:compile(p_testcase)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
-
-    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:compilation_flags
+    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getCompilationFlags()
 endfunction
 
 
 function s:buildAndRun(p_testcase)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
-    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:build_flags.' -logdir '.s:getPathToLogsTopDir(g:cplane#cache#variant)
+    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags()
 endfunction
-
 
 
 function cplane#sct#testcase#CompileFromCursorLine()
@@ -70,6 +77,7 @@ function cplane#sct#testcase#BuildAndRunFromCursorLine()
     if(len(l:testcase))
         call s:buildAndRun(l:testcase)
     else
-        execute 'echo ''compilation failed: move cursor on line with testcase name'' '
+        execute 'echo ''build and run failed: move cursor on line with testcase name'' '
     endif
 endfunction
+
