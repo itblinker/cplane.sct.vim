@@ -5,24 +5,13 @@ if !s:enter
 endif
 "}}}
 
-command SctCompileFromCursorLine :call cplane#sct#testcase#CompileFromCursorLine()
-command SctRunFromCursorLine :call cplane#sct#testcase#BuildAndRunFromCursorLine()
+command CplaneUpSack : execute 'Start -wait=''error'' make upSack'
 
-command UpSack : execute 'Start -wait=''error'' make upSack'
-command ReTagCppForCurrentComponent : call cplane#cpp#tags#Update()
-command ReTagTtcnForCurrentComponent : call cplane#sct#tags#Update()
+command CplaneCppReTagCurrentComponent : call cplane#cpp#tags#Update()
+command CplaneReTagTtcnCurrentComponent : call cplane#sct#tags#Update()
 
+command CplaneCppAutoTagON  : call cplane#cpp#events#AutoTagON()
+command CplaneCppAutoTagOFF : call cplane#cpp#events#AutoTagOFF()
 
-
-
-
-" TODO fill and provide method / command to change variant
-" run / compile should run my filtering script
-" caching only testcase name
-"command SCTRunFromCursorLine : call
-"command SCTRunReRunLastCommand : call
-"command SCTRunPrintLastCommand : call
-"
-"TODO: coalescence run: no logs, toggle detector, config from variant,
-" coalescence (compile for all architecture and run coalescence for all of
-" them)
+command CplaneTtcnAutoTagON  : call cplane#sct#events#AutoTagON()
+command CplaneTtcnAutoTagOFF : call cplane#sct#events#AutoTagOFF()
