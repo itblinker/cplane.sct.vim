@@ -14,7 +14,7 @@ let s:common_flags = ' -basket ALL '
 let s:compilation_flags = ' -k3conly '.s:common_flags
 let s:build_flags = ' -keeplogs -keepk3log '.s:common_flags
 
-
+"{{{ local functions
 function s:getPathToLogsTopDir(p_variant)
     return s:logs_top_dir.'/'.a:p_variant
 endfunction
@@ -60,6 +60,7 @@ function s:buildAndRun(p_testcase)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
     execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags()
 endfunction
+"}}}
 
 
 function cplane#sct#testcase#CompileFromCursorLine()
@@ -76,8 +77,13 @@ function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
         call s:buildAndRun(l:testcase)
+        "call cplane#sct#k3post#Do(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:testcase) )
     else
         execute 'echo ''build and run failed: move cursor on line with testcase name'' '
     endif
 endfunction
 
+
+function cplane#sct#testcase#ProcessTestCaseLogsFromCursorLine()
+    call cplane#sct#k3post#Do(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(s:getTestCaseFromCursorLine()) )
+endfunction
