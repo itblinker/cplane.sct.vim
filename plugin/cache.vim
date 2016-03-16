@@ -10,5 +10,6 @@ let g:cplane#component#None = ''
 let g:cplane#cpp#cache#component = g:cplane#component#None
 let g:cplane#sct#cache#component = g:cplane#component#None
 
+"let g:cplane#cache#variant = 'fsmr3'    "default fsmr3 fdd
 let g:cplane#cache#variant = 'fsmr3'    "default fsmr3 fdd
 
