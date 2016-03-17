@@ -7,11 +7,10 @@ endif
 
 command CplaneUpSack : execute 'Start -wait=''error'' make upSack'
 
-command CplaneCppReTagCurrentComponent : call cplane#cpp#tags#Update()
-command CplaneReTagTtcnCurrentComponent : call cplane#sct#tags#Update()
+command CplaneRetag : call cplane#Retag()
 
-command CplaneCppAutoTagON  : call cplane#cpp#events#AutoTagON()
-command CplaneCppAutoTagOFF : call cplane#cpp#events#AutoTagOFF()
+command CplaneAutoTagON  : call cplane#AutoTagON()
+command CplaneAutoTagOFF : call cplane#AutoTagOFF()
 
-command CplaneTtcnAutoTagON  : call cplane#sct#events#AutoTagON()
-command CplaneTtcnAutoTagOFF : call cplane#sct#events#AutoTagOFF()
+command CplaneVariantEcho : call cplane#EchoVariant()
+command -nargs=1 CplaneVariantSave call cplane#SaveVariant(<f-args>)

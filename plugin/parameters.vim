@@ -20,8 +20,18 @@ let g:fsmr3_tdd = 'tddfsmr3'
 let g:fsmr4_tdd = 'tddrsmr4'
 
 let g:variants = {
-            \ g:fsmr3_fdd : {'local_script' : 'fsmr3', 'coalescence': '.config_fsmr3'},
-            \ g:fsmr3_tdd : {'local_script' : 'tddfsmr3', 'coalescence': '.config_tddfsmr3'},
-            \ g:fsmr4_fdd : {'local_script' : 'fsmr4', 'coalescence': '.config_fsmr4'},
-            \ g:fsmr4_tdd : {'local_script' : 'tddfsmr4', 'coalescence': '.config_tddfsmr4'}
+            \ g:fsmr3_fdd : '.config_fsmr3',
+            \ g:fsmr3_tdd : '.config_tddfsmr3',
+            \ g:fsmr4_fdd : '.config_fsmr4',
+            \ g:fsmr4_tdd : '.config_tddfsmr4'
             \ }
+
+"{{{ CACHE
+let g:cplane#component#None = ''
+
+let g:cplane#cpp#cache#component = g:cplane#component#None
+let g:cplane#sct#cache#component = g:cplane#component#None
+
+let g:cplane#cache#variant = 'fsmr3'    "default fsmr3 fdd"
+"}}}
+
