@@ -7,12 +7,22 @@ let s:sc_script = {
             \ g:mcec   : 'sct_mcec.sh'
             \ }
 
+let s:variantsMap = {
+            \ g:fsmr3_fdd  : 'fsmr3',
+            \ g:fsmr3_tdd  : 'tddfsmr3',
+            \ g:fsmr4_fdd  : 'fsmr4',
+            \ g:fsmr4_tdd  : 'tddfsmr4'
+            \ }
+
+
+
 let s:script_path = getcwd().'/lteTools/scbm/bin'
 let s:logs_top_dir = getcwd().'/logs/SCTs'
 
 let s:common_flags = ' -basket ALL '
 let s:compilation_flags = ' -k3conly '.s:common_flags
 let s:build_flags = ' -keeplogs -keepk3log '.s:common_flags
+" variant
 
 "{{{ local functions
 function s:getPathToLogsTopDir(p_variant)
@@ -40,13 +50,24 @@ function s:getTestCaseFromCursorLine()
 endfunction
 
 
+function s:getDynamicCompilationFlags()
+    return ' -variant '.s:getVariant().' -logdir '.s:getPathToLogsTopDir(cplane#variant#Get())
+endfunction
+
+
 function s:getCompilationFlags()
-    return s:compilation_flags.'-logdir '.s:getPathToLogsTopDir(cplane#variant#Get())
+    return s:compilation_flags.s:getDynamicCompilationFlags()
 endfunction
 
 
 function s:getBuildAndRunFlags()
-    return s:build_flags.'-logdir '.s:getPathToLogsTopDir(cplane#variant#Get())
+    return s:build_flags.s:getDynamicCompilationFlags()
+endfunction
+
+
+function s:getVariant()
+    call maktaba#ensure#IsTrue(has_key(s:variantsMap, cplane#variant#Get()))
+    return s:variantsMap[cplane#variant#Get()]
 endfunction
 
 
