@@ -32,6 +32,7 @@ function cplane#cpp#grep#Execute(p_pattern)
     let l:path = s:getPath(l:sc)
 
     if len(l:path)
+        execute 'echomsg ''path is '''.l:path
         execute manager#utils#GetFGrepCmd(a:p_pattern, l:path, s:grepFlags)
     else
         execute 'echo ''code grep error! unknown component source'' '
