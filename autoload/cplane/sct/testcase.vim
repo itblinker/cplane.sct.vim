@@ -25,7 +25,7 @@ endfunction
 
 
 function s:getPathToLogs(p_testcaseName)
-    return s:getPathToLogsTopDir(g:cplane#cache#variant).'/'.a:p_testcaseName
+    return s:getPathToLogsTopDir(cplane#variant#Get()).'/'.a:p_testcaseName
 endfunction
 
 
@@ -41,12 +41,12 @@ endfunction
 
 
 function s:getCompilationFlags()
-    return s:compilation_flags.'-logdir '.s:getPathToLogsTopDir(g:cplane#cache#variant)
+    return s:compilation_flags.'-logdir '.s:getPathToLogsTopDir(cplane#variant#Get())
 endfunction
 
 
 function s:getBuildAndRunFlags()
-    return s:build_flags.'-logdir '.s:getPathToLogsTopDir(g:cplane#cache#variant)
+    return s:build_flags.'-logdir '.s:getPathToLogsTopDir(cplane#variant#Get())
 endfunction
 
 

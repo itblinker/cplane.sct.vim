@@ -26,7 +26,7 @@ function s:getPath(p_component)
 endfunction
 "}}}
 
-function cplane#sct#grep#Execute(p_pattern)
+function cplane#sct#fgrep#Execute(p_pattern)
     let l:sc = cplane#sct#component#GetNameFromBuffer()
     let l:path = s:getPath(l:sc)
 
@@ -37,6 +37,6 @@ function cplane#sct#grep#Execute(p_pattern)
     endif
 endfunction
 
-function cplane#sct#grep#CTests(p_pattern)
+function cplane#sct#fgrep#CTests(p_pattern)
     execute manager#utils#GetFGrepCmd(a:p_pattern, s:path_CTest, s:grepFlags)
 endfunction

@@ -27,7 +27,7 @@ endfunction
 
 "}}}
 
-function cplane#cpp#grep#Execute(p_pattern)
+function cplane#cpp#fgrep#Execute(p_pattern)
     let l:sc = cplane#cpp#component#GetNameFromBuffer()
     let l:path = s:getPath(l:sc)
 
@@ -40,6 +40,6 @@ function cplane#cpp#grep#Execute(p_pattern)
 endfunction
 
 
-function cplane#cpp#grep#CApplication(p_pattern)
+function cplane#cpp#fgrep#CApplication(p_pattern)
     execute manager#utils#GetFGrepCmd(a:p_pattern, s:path_CApplication, s:grepFlags)
 endfunction

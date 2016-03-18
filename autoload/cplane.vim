@@ -10,6 +10,7 @@ function cplane#AutoTagOFF()
     call cplane#sct#events#AutoTagOFF()
 endfunction
 "}}}
+
 "{{{ retag
 function cplane#Retag()
     let l:filetype = &filetype
@@ -20,16 +21,3 @@ function cplane#Retag()
     endif
 endfunction
 "}}}
-
-function cplane#GetVariant()
-    return g:cplane#cache#variant
-endfunction
-
-function cplane#EchoVariant()
-    execute 'echo ''variant in use: '.g:cplane#cache#variant.''''
-endfunction
-
-
-function cplane#SaveVariant(p_variant)
-    let g:cplane#cache#variant = a:p_variant
-endfunction
