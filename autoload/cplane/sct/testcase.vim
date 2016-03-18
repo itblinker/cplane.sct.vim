@@ -14,7 +14,7 @@ let s:variantsMap = {
             \ g:fsmr4_tdd  : 'tddfsmr4'
             \ }
 
-
+let s:lastTestCase = ''
 
 let s:script_path = getcwd().'/lteTools/scbm/bin'
 let s:logs_top_dir = getcwd().'/logs/SCTs'
@@ -70,6 +70,18 @@ function s:getVariant()
     return s:variantsMap[cplane#variant#Get()]
 endfunction
 
+function s:storeParametersForK3(p_testcase, p_logPath)
+    call add(g:cplane#cache#k3parameters, [a:p_testcase, a:p_logPath])
+endfunction
+
+function s:fetchParametersForK3()
+    return g:cplane#cache#k3parameters
+endfunction
+
+function s:eraseUsedK3Parameters()
+    let g:cplane#cache#k3parameters = []
+endfunction
+
 
 function s:compile(p_testcase)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
@@ -87,6 +99,7 @@ endfunction
 function cplane#sct#testcase#CompileFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
+        let s:lastTestCase = l:testcase
         call s:compile(l:testcase)
     else
         execute 'echo ''compilation failed: move cursor on line with testcase name'' '
@@ -94,17 +107,29 @@ function cplane#sct#testcase#CompileFromCursorLine()
 endfunction
 
 
+function cplane#sct#testcase#CompileLastOne()
+    if len(s:lastTestCase)
+        call s:compile(l:lastTestCase)
+    else
+        execute 'echo ''compilation failed: no previous compile tests'' '
+    endif
+endfunction
+
+
 function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
+        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:testcase))
         call s:buildAndRun(l:testcase)
-        "call cplane#sct#k3post#Do(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:testcase) )
     else
         execute 'echo ''build and run failed: move cursor on line with testcase name'' '
     endif
 endfunction
 
 
-function cplane#sct#testcase#ProcessTestCaseLogsFromCursorLine()
-    call cplane#sct#k3post#Do(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(s:getTestCaseFromCursorLine()) )
+function cplane#sct#testcase#ProcessBuildedTestCases()
+    for data in s:fetchParametersForK3()
+        call cplane#sct#k3post#Do(data[0], data[1])
+    endfor
+    call s:eraseUsedK3Parameters()
 endfunction

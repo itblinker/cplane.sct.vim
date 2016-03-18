@@ -21,3 +21,7 @@ function cplane#cpp#make#BuildComponentTargetForFsmVariants(p_sc)
    execute 'Copen!'
 endfunction
 
+function cplane#cpp#make#UpSack()
+    execute 'Make upSack'
+endfunction
+

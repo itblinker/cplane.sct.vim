@@ -34,5 +34,8 @@ let g:cplane#Emtpy = ''
 let g:cplane#cache#variant = g:fsmr3_fdd
 "}}}
 
+"{{{ cache for testcase name / path to logs
+let g:cplane#cache#k3parameters = []
+"}}}
 "}}}
 
