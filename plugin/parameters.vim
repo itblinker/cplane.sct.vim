@@ -19,12 +19,20 @@ let g:fsmr4_fdd = 'fsmr4'
 let g:fsmr3_tdd = 'tddfsmr3'
 let g:fsmr4_tdd = 'tddfsmr4'
 
-"{{{ CACHE
-let g:cplane#component#None = ''
+"TODO : exchange all places of g:cache#variant by get and set
 
+"{{{ CACHE
+
+"{{{ cache for tagging
+let g:cplane#component#None = ''
 let g:cplane#cpp#cache#component = g:cplane#component#None
 let g:cplane#sct#cache#component = g:cplane#component#None
+"}}}
 
+"{{{ cache for variant
+let g:cplane#Emtpy = ''
 let g:cplane#cache#variant = g:fsmr3_fdd
+"}}}
+
 "}}}
 

@@ -8,6 +8,7 @@ let s:parameters = {
             \ g:lom    : getcwd().'/C_Application/SC_LOM',
             \ g:common : getcwd().'/C_Application/SC_Common'
             \ }
+let s:path_CApplication = getcwd().'/C_Application'
 
 let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h --include=*.mk '
@@ -41,3 +42,7 @@ function cplane#cpp#grep#Execute(p_pattern)
     endif
 endfunction
 
+
+function cplane#cpp#grep#CApplication(p_pattern)
+    execute s:getCmd(a:p_pattern, s:path_CApplication)
+endfunction

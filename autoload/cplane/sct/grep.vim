@@ -8,6 +8,8 @@ let s:parameters = {
             \ g:common : getcwd().'/C_Test/cplane_k3/src/Common'
             \ }
 
+let s:path_CTest = getcwd().'/C_Test'
+
 let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.ttcn3'
 let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr '
@@ -40,3 +42,6 @@ function cplane#sct#grep#Execute(p_pattern)
     endif
 endfunction
 
+function cplane#sct#grep#CTests(p_pattern)
+    execute s:getCmd(a:p_pattern, s:path_CTest)
+endfunction
