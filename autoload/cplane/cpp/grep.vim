@@ -14,7 +14,7 @@ let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h --include=*.mk '
 let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr '
 
-let s:arguments = s:arg_common.s:arg_include.s:arg_exclude
+let s:grepFlags = s:arg_common.s:arg_include.s:arg_exclude
 
 "{{{ helpers
 function s:getPath(p_component)
@@ -25,10 +25,6 @@ function s:getPath(p_component)
     endif
 endfunction
 
-
-function s:getCmd(p_pattern, p_path)
-    return 'grep! '.s:arguments.' -e '''.a:p_pattern.''' '.a:p_path
-endfunction
 "}}}
 
 function cplane#cpp#grep#Execute(p_pattern)
@@ -36,7 +32,7 @@ function cplane#cpp#grep#Execute(p_pattern)
     let l:path = s:getPath(l:sc)
 
     if len(l:path)
-        execute s:getCmd(a:p_pattern, l:path)
+        execute manager#utils#GetFGrepCmd(a:p_pattern, l:path, s:grepFlags)
     else
         execute 'echo ''code grep error! unknown component source'' '
     endif
@@ -44,5 +40,5 @@ endfunction
 
 
 function cplane#cpp#grep#CApplication(p_pattern)
-    execute s:getCmd(a:p_pattern, s:path_CApplication)
+    execute manager#utils#GetFGrepCmd(a:p_pattern, s:path_CApplication, s:grepFlags)
 endfunction
