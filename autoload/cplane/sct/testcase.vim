@@ -70,8 +70,8 @@ function s:getVariant()
     return s:variantsMap[cplane#variant#Get()]
 endfunction
 
-function s:storeParametersForK3(p_component, p_logPath)
-    call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath])
+function s:storeParametersForK3(p_component, p_logPath, p_testcase)
+    call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath, a:p_testcase])
 endfunction
 
 function s:fetchParametersForK3()
@@ -119,7 +119,7 @@ endfunction
 function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
-        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:testcase))
+        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:testcase), l:testcase)
         call s:buildAndRun(l:testcase)
     else
         execute 'echo ''build and run failed: move cursor on line with testcase name'' '
@@ -132,7 +132,7 @@ function cplane#sct#testcase#ProcessBuildedTestCases()
 
     if len(l:logsToProcess)
         for data in s:fetchParametersForK3()
-            call cplane#sct#k3post#Do(data[0], data[1])
+            call cplane#sct#k3post#Do(data[0], data[1], data[2])
         endfor
         call s:eraseUsedK3Parameters()
     else

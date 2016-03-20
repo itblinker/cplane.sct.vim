@@ -12,10 +12,16 @@ function s:getDestDir(p_logPath)
 endfunction
 
 
-function s:copyLogsAndRename(p_logPath)
+function s:getFileWithBinaryLogs(p_logPath, p_testcaseName)
+    return a:p_logPath.'/'.a:p_testcaseName.'.out'
+endfunction
+
+function s:copyLogFilesToDestinationDirectory(p_logPath, p_testcase)
     let l:dDir = s:getDestDir(a:p_logPath)
-   system('cp *.k3.txt '.l:dDir.'/SCT.log')
-   system('cp *')
+    let l:binaryLogFile = s:getFileWithBinaryLogs(a:p_logPath, a:p_testcase)
+
+    call system('cp '.a:p_logPath.'/'.'*_SCT.k3.txt '.l:dDir.'/SCT.k3.log')
+    call system('cp '.a:p_logPath.'/'. a:p_testcase.'.out '.l:dDir.'/Binary.k3.log')
 endfunction
 
 
@@ -55,7 +61,7 @@ function s:getCmd(p_sc, p_logPath)
    return 'Start k3post.py '.s:getK3log(a:p_sc, a:p_logPath).' '
 endfunction
 
-function s:processing(p_sc, p_path)
+function s:processing(p_sc, p_path, p_testcase)
     let l:dDir = s:getDestDir(a:p_path)
     let l:sDir = s:getDestDirForSplit(a:p_path)
 
@@ -70,13 +76,15 @@ function s:processing(p_sc, p_path)
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --functions --no-function-indent --user-logs --wait-for --timestamps --out='.l:dDir.'/_k3_full_'
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --functions --no-function-indent --user-logs --wait-for --timestamps --split-log --out='.l:sDir.'/out'
 
+    call s:copyLogFilesToDestinationDirectory(a:p_path, a:p_testcase)
+
 endfunction
 
 "}}}
 
-function cplane#sct#k3post#Do(p_component, p_logPath)
+function cplane#sct#k3post#Do(p_component, p_logPath, p_testcase)
     if s:areLogsAvailable(a:p_logPath)
-        call s:processing(a:p_component, a:p_logPath)
+        call s:processing(a:p_component, a:p_logPath, a:p_testcase)
     else
         echom 'there are no sct logs needed by k3post-processor, run testcase first!'
     endif
