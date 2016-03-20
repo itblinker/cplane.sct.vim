@@ -8,10 +8,14 @@ let s:sc = {  g:rrom  : 'RROM',
 
 "{{{ local functions
 function s:getDestDir(p_logPath)
-    "let l:p = a:p_logPath.'/postproc'
-    "execute 'echo '' '.l:p.' '' '
-
     return a:p_logPath.'/postproc'
+endfunction
+
+
+function s:copyLogsAndRename(p_logPath)
+    let l:dDir = s:getDestDir(a:p_logPath)
+   system('cp *.k3.txt '.l:dDir.'/SCT.log')
+   system('cp *')
 endfunction
 
 
@@ -74,7 +78,7 @@ function cplane#sct#k3post#Do(p_component, p_logPath)
     if s:areLogsAvailable(a:p_logPath)
         call s:processing(a:p_component, a:p_logPath)
     else
-        echom 'there are no logs, run testcase first!'
+        echom 'there are no sct logs needed by k3post-processor, run testcase first!'
     endif
 endfunction
 

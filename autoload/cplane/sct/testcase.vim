@@ -14,16 +14,16 @@ let s:variantsMap = {
             \ g:fsmr4_tdd  : 'tddfsmr4'
             \ }
 
-let s:lastTestCase = ''
-
 let s:script_path = getcwd().'/lteTools/scbm/bin'
 let s:logs_top_dir = getcwd().'/logs/SCTs'
 
 let s:common_flags = ' -basket ALL '
 let s:compilation_flags = ' -k3conly '.s:common_flags
 let s:build_flags = ' -keeplogs -keepk3log '.s:common_flags
-" variant
 
+"{{{ cache
+let s:lastTestCase = ''
+"}}}
 "{{{ local functions
 function s:getPathToLogsTopDir(p_variant)
     return s:logs_top_dir.'/'.a:p_variant
@@ -70,8 +70,8 @@ function s:getVariant()
     return s:variantsMap[cplane#variant#Get()]
 endfunction
 
-function s:storeParametersForK3(p_testcase, p_logPath)
-    call add(g:cplane#cache#k3parameters, [a:p_testcase, a:p_logPath])
+function s:storeParametersForK3(p_component, p_logPath)
+    call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath])
 endfunction
 
 function s:fetchParametersForK3()
@@ -128,8 +128,14 @@ endfunction
 
 
 function cplane#sct#testcase#ProcessBuildedTestCases()
-    for data in s:fetchParametersForK3()
-        call cplane#sct#k3post#Do(data[0], data[1])
-    endfor
-    call s:eraseUsedK3Parameters()
+    let l:logsToProcess = s:fetchParametersForK3()
+
+    if len(l:logsToProcess)
+        for data in s:fetchParametersForK3()
+            call cplane#sct#k3post#Do(data[0], data[1])
+        endfor
+        call s:eraseUsedK3Parameters()
+    else
+        execute 'echo ''pool of testcases to process by k3 post processor is empty, run testcase first'' '
+    endif
 endfunction
