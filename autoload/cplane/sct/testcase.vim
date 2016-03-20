@@ -71,15 +71,16 @@ function s:getVariant()
 endfunction
 
 function s:storeParametersForK3(p_component, p_logPath, p_testcase)
-    call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath, a:p_testcase])
+    let g:cplane#cache#k3parameters[a:p_testcase] = [a:p_component, a:p_logPath, a:p_testcase]
+    "call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath, a:p_testcase])
 endfunction
 
 function s:fetchParametersForK3()
-    return g:cplane#cache#k3parameters
+    return values(g:cplane#cache#k3parameters)
 endfunction
 
 function s:eraseUsedK3Parameters()
-    let g:cplane#cache#k3parameters = []
+    let g:cplane#cache#k3parameters = {}
 endfunction
 
 
