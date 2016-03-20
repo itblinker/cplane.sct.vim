@@ -128,6 +128,32 @@ function s:buildAndRun(p_testcase, p_variant)
     call s:backupPreviousLogs(s:getPathToLogs(a:p_variant, a:p_testcase))
     execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags(a:p_variant)
 endfunction
+
+"{{{ get variant from user
+function s:isVariantValid(p_variant)
+   if (index(values(s:variantsMap), a:p_variant) >= 0)
+       return 1
+   else
+       return 0
+   endif
+endfunction
+
+
+function s:GetVariantFromUser()
+    let l:valid = 0
+    while l:valid == 0
+        let l:variant = input('[fsmr3][fsmr4][ddfsmr3][tddfsmr4] ? : ')
+        let l:valid = s:isVariantValid(l:variant)
+    endwhile
+    
+    return l:variant
+endfunction
+"}}}
+
+function cplane#sct#testcase#Valid()
+    execute 'echo ''variant is '.s:GetVariantFromUser().''''
+endfunction
+
 "}}}
 
 
@@ -135,7 +161,7 @@ function cplane#sct#testcase#CompileFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
         let s:lastTestCase = l:testcase
-        call s:compile(l:testcase, cplane#variant#Get())
+        call s:compile(l:testcase, s:GetVariantFromUser())
     else
         execute 'echo ''compilation failed: move cursor on line with testcase name'' '
     endif
@@ -154,8 +180,9 @@ endfunction
 function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
-        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(cplane#variant#Get(), l:testcase), l:testcase)
-        call s:buildAndRun(l:testcase, cplane#variant#Get())
+        let l:variant = s:GetVariantFromUser()
+        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:variant, l:testcase), l:testcase)
+        call s:buildAndRun(l:testcase, l:variant)
     else
         execute 'echo ''build and run failed: move cursor on line with testcase name'' '
     endif
