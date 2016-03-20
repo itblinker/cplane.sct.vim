@@ -34,8 +34,8 @@ function s:getBin(p_component)
 endfunction
 
 
-function s:getPathToLogs(p_testcaseName)
-    return s:getPathToLogsTopDir(cplane#variant#Get()).'/'.a:p_testcaseName
+function s:getPathToLogs(p_variant, p_testcaseName)
+    return s:getPathToLogsTopDir(a:p_variant.'/'.a:p_testcaseName)
 endfunction
 
 
@@ -50,29 +50,29 @@ function s:getTestCaseFromCursorLine()
 endfunction
 
 
-function s:getDynamicCompilationFlags()
-    return ' -variant '.s:getVariant().' -logdir '.s:getPathToLogsTopDir(cplane#variant#Get())
+function s:getDynamicCompilationFlags(p_variant)
+    return ' -variant '.s:getVariant(a:p_variant).' -logdir '.s:getPathToLogsTopDir(a:p_variant)
 endfunction
 
 
-function s:getCompilationFlags()
-    return s:compilation_flags.s:getDynamicCompilationFlags()
+function s:getCompilationFlags(p_variant)
+    return s:compilation_flags.s:getDynamicCompilationFlags(a:p_variant)
 endfunction
 
 
-function s:getBuildAndRunFlags()
-    return s:build_flags.s:getDynamicCompilationFlags()
+function s:getBuildAndRunFlags(p_variant)
+    return s:build_flags.s:getDynamicCompilationFlags(a:p_variant)
 endfunction
 
 
-function s:getVariant()
-    call maktaba#ensure#IsTrue(has_key(s:variantsMap, cplane#variant#Get()))
-    return s:variantsMap[cplane#variant#Get()]
+function s:getVariant(p_variant)
+    call maktaba#ensure#IsTrue(has_key(s:variantsMap, a:p_variant))
+    return s:variantsMap[a:p_variant]
 endfunction
+
 
 function s:storeParametersForK3(p_component, p_logPath, p_testcase)
     let g:cplane#cache#k3parameters[a:p_testcase] = [a:p_component, a:p_logPath, a:p_testcase]
-    "call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath, a:p_testcase])
 endfunction
 
 function s:fetchParametersForK3()
@@ -84,9 +84,9 @@ function s:eraseUsedK3Parameters()
 endfunction
 
 
-function s:compile(p_testcase)
+function s:compile(p_testcase, p_variant)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
-    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getCompilationFlags()
+    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getCompilationFlags(a:p_variant)
 endfunction
 
 "{{{ 'backup existing logs'
@@ -122,11 +122,11 @@ function s:backupPreviousLogs(p_logPath)
 endfunction
 "}}}
 
-function s:buildAndRun(p_testcase)
+function s:buildAndRun(p_testcase, p_variant)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
 
-    call s:backupPreviousLogs(s:getPathToLogs(a:p_testcase))
-    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags()
+    call s:backupPreviousLogs(s:getPathToLogs(a:p_variant, a:p_testcase))
+    execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags(a:p_variant)
 endfunction
 "}}}
 
@@ -135,7 +135,7 @@ function cplane#sct#testcase#CompileFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
         let s:lastTestCase = l:testcase
-        call s:compile(l:testcase)
+        call s:compile(l:testcase, cplane#variant#Get())
     else
         execute 'echo ''compilation failed: move cursor on line with testcase name'' '
     endif
@@ -144,7 +144,7 @@ endfunction
 
 function cplane#sct#testcase#CompileLastOne()
     if len(s:lastTestCase)
-        call s:compile(l:lastTestCase)
+        call s:compile(l:lastTestCase, cplane#variant#Get())
     else
         execute 'echo ''compilation failed: no previous compile tests'' '
     endif
@@ -154,8 +154,8 @@ endfunction
 function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
     if(len(l:testcase))
-        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:testcase), l:testcase)
-        call s:buildAndRun(l:testcase)
+        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(cplane#variant#Get(), l:testcase), l:testcase)
+        call s:buildAndRun(l:testcase, cplane#variant#Get())
     else
         execute 'echo ''build and run failed: move cursor on line with testcase name'' '
     endif
