@@ -5,8 +5,7 @@ if !s:enter
 endif
 "}}}
 
-command CplaneUpSack : call cplane#cpp#make#UpSack()
-command -nargs=1 CplaneMakeComponentForFsmVariants : call cplane#cpp#make#BuildComponentTargetForFsmVariants(<f-args>)
+command -nargs=1 CplaneMakeForBothFsmr : call cplane#cpp#make#MakeForBothFsmr(<f-args>)
 
 command CplaneRetag : call cplane#Retag()
 
@@ -17,5 +16,4 @@ command -nargs=1 CplaneFGrepCApplication : call cplane#cpp#fgrep#CApplication(<f
 command -nargs=1 CplaneFGrepCTests : call cplane#sct#fgrep#CTests(<f-args>)
 
 command -nargs=1 CplaneVariantSave call cplane#variant#Set(<f-args>)
-
-command CplaneEchoFsmVariant : call cplane#variant#Echo()
+command CplaneVariantEchoCurrent : call cplane#variant#Echo()

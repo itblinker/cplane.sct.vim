@@ -23,9 +23,11 @@ function cplane#variant#Get()
     return g:cplane#cache#variant
 endfunction
 
+
 function cplane#variant#Echo()
-    execute 'echo ''variant in use: '''.cplane#variant#Get()
+    execute 'echo ''variant in use: '.cplane#variant#Get().''''
 endfunction
+
 
 function cplane#variant#Set(p_variant)
     try

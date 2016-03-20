@@ -12,6 +12,3 @@ function cplane#cpp#events#AutoTagOFF()
     execute 'augroup! CppAutoTag'
 endfunction
 
-function! GetGrepRootDirectory()
-    return 
-endfunction

@@ -1,3 +1,7 @@
+let s:symlinksDir = [
+            \ getcwd().'/C_Application/OpenGrok',
+            \  ]
+
 let s:common_sacks = [
             \ getcwd().'/lteDo'
             \ ]
@@ -16,7 +20,6 @@ let s:parameters = {
 let s:find_arg = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
 let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
 
-"{{{ functions
 "{{{ One-Time Path Validation
     "{{{ validation methods
 
@@ -42,28 +45,35 @@ let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
 
 
     function s:validatePaths()
-        for key in keys(s:parameters)
-            call s:validateListOfPaths(s:getListOfPathsForComponent(key))
-        endfor
+        try
+            for key in keys(s:parameters)
+                call s:validateListOfPaths(s:getListOfPathsForComponent(key))
+            endfor
 
-        call s:validateListOfPaths(s:common_sacks)
+            call s:validateListOfPaths(s:common_sacks)
+            call s:validateListOfPaths(s:symlinksDir)
+        catch
+            call maktaba#error#Shout('some paths for gtags are unknown, please check '.expand('<sfile>:p'))
+        endtry
     endfunction
 
     "}}}
 call s:validatePaths()
 "}}}
+"{{{ helpers
 
+function s:execute(p_component)
 
-function cplane#cpp#tags#Do(p_component)
+    call s:removePreviousListOfFiles()
+    call s:createListOfFilesToTag(a:p_component)
+    call s:appendFilesFromSymlinksToTagginList(s:symlinksDir)
 
-    call cplane#cpp#tags#RemovePreviousListOfFilesToIndex()
-    call cplane#cpp#tags#CreateListOfFilesToIndex(a:p_component)
-
-    execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
+    call cplane#UpSack()
+    execute 'Start -wait=''always'' gtags -f '.s:tempFileToStoreSources
 endfunction
 
 
-function cplane#cpp#tags#CreateListOfFilesToIndex(p_component)
+function s:createListOfFilesToTag(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
     for path in l:listOfAllNeededPaths
         execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
@@ -71,18 +81,25 @@ function cplane#cpp#tags#CreateListOfFilesToIndex(p_component)
 endfunction
 
 
-function cplane#cpp#tags#RemovePreviousListOfFilesToIndex()
+function s:appendFilesFromSymlinksToTagginList(p_listOfPaths)
+    for path in a:p_listOfPaths
+        execute 'Start! find -L '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
+    endfor
+endfunction
+
+
+function s:removePreviousListOfFiles()
     if filereadable(s:tempFileToStoreSources)
         execute 'Start -wait rm -f '.s:tempFileToStoreSources
     endif
 endfunction
-
+"}}}
 
 function cplane#cpp#tags#Update()
     let l:currentOne = cplane#cpp#component#GetNameFromBuffer()
     try
         call maktaba#ensure#IsTrue(cplane#cpp#component#IsSupported(l:currentOne))
-        call cplane#cpp#tags#Do(l:currentOne)
+        call s:execute(l:currentOne)
     catch
         call maktaba#error#Shout('cplane.vim: cann''t tag the component resolved as %s', l:currentOne)
     endtry
@@ -98,15 +115,14 @@ function cplane#cpp#tags#UpdateIfNeeded()
     if (cplane#cpp#component#IsCacheOutdated(l:newOne))
         if cplane#cpp#component#IsCacheHasNotBeenInitialized()
             call cplane#cpp#component#Cache(l:newOne)
-            call cplane#cpp#tags#Do(l:newOne)
+            call s:execute(l:newOne)
             return
         endif
 
         if ! (l:newOne ==# g:common)
             call cplane#cpp#component#Cache(l:newOne)
-            call cplane#cpp#tags#Do(l:newOne)
+            call s:execute(l:newOne)
         endif
     endif
 
 endfunction
-"}}}

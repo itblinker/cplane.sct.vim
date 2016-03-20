@@ -64,17 +64,18 @@ call s:validatePaths()
 "}}}
 
 
-function cplane#sct#tags#Do(p_component)
+function s:execute(p_component)
 
-    call cplane#sct#tags#RemovePreviousListOfFilesToIndex()
-    call cplane#sct#tags#CreateListOfFilesToIndex(a:p_component)
+    call s:removePreviousListOfFilesToTag()
+    call s:createListOfFilesToTag(a:p_component)
+    call cplane#UpSack()
 
     execute 'Start -wait=''error'' ctags-with-ttcn -f '.s:ctagFile.' --language-force=ttcn -L '.s:tempFileToStoreSources
     execute 'set tag='.s:ctagFile
 endfunction
 
 
-function cplane#sct#tags#CreateListOfFilesToIndex(p_component)
+function s:createListOfFilesToTag(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
     for path in l:listOfAllNeededPaths
         execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
@@ -82,7 +83,7 @@ function cplane#sct#tags#CreateListOfFilesToIndex(p_component)
 endfunction
 
 
-function cplane#sct#tags#RemovePreviousListOfFilesToIndex()
+function s:removePreviousListOfFilesToTag()
     if filereadable(s:tempFileToStoreSources)
         execute 'Start -wait rm -f '.s:tempFileToStoreSources
     endif
@@ -94,7 +95,7 @@ function cplane#sct#tags#Update()
     let l:currentOne = cplane#sct#component#GetNameFromBuffer()
     try
         call maktaba#ensure#IsTrue(cplane#sct#component#IsSupported(l:currentOne))
-        call cplane#sct#tags#Do(l:currentOne)
+        call s:execute(l:currentOne)
     catch
         call maktaba#error#Shout('cplane.vim: cann''t tag the component resolved as %s', l:currentOne)
     endtry
@@ -110,13 +111,13 @@ function cplane#sct#tags#UpdateIfNeeded()
     if (cplane#sct#component#IsCacheOutdated(l:newOne))
         if cplane#sct#component#IsCacheHasNotBeenInitialized()
             call cplane#sct#component#Cache(l:newOne)
-            call cplane#sct#tags#Do(l:newOne)
+            call s:execute(l:newOne)
             return
         endif
 
         if ! (l:newOne ==# g:common)
             call cplane#sct#component#Cache(l:newOne)
-            call cplane#sct#tags#Do(l:newOne)
+            call s:execute(l:newOne)
         endif
     endif
 

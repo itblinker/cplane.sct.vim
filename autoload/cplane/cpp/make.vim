@@ -1,27 +1,15 @@
-let s:targetMap = {
-            \ g:rrom   : 'ptRROM',
-            \ g:uec    : 'ptUEC',
-            \ g:enbc   : 'ptENBC',
-            \ g:cellc  : 'ptCELLC',
-            \ g:tupc   : 'ptTUPC',
-            \ g:mcec   : 'ptMCEC',
-            \ }
+let s:configs = [
+            \ '.config_fsmr3',
+            \ '.config_fsmr4'
+            \ ]
 
-function cplane#cpp#make#BuildComponentTargetForFsmVariants(p_sc)
-    try
-        call maktaba#ensure#IsTrue(has_key(tolower(s:targetMap), a:p_sc))
-    catch
-        execute 'echo ''cplane component target unknown!'''
-    endtry
+            "\ '.config_tddfsmr3',
+            "\ '.config_tddfsmr4'
 
-   execute 'Make '.s:targetMap[a:p_sc].' A=linux'
-   execute 'Copen!'
 
-   execute 'Make '.s:targetMap[a:p_sc].' A=linux64'
-   execute 'Copen!'
+function cplane#cpp#make#MakeForBothFsmr(p_target)
+    for cf in s:configs
+        execute 'Make '.a:p_target.' CFG='.cf
+        execute 'Copen!'
+    endfor
 endfunction
-
-function cplane#cpp#make#UpSack()
-    execute 'Make upSack'
-endfunction
-
