@@ -88,9 +88,43 @@ function s:compile(p_testcase)
     execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getCompilationFlags()
 endfunction
 
+"{{{ 'backup existing logs'
+let s:cache_logs_backup_current_id = {}
+let s:cache_logs_backup_prefix = '.backup.'
+
+
+function s:getBackupDestinationDirProposal(p_logPath)
+    if(has_key(s:cache_logs_backup_current_id, a:p_logPath))
+        let s:cache_logs_backup_current_id[a:p_logPath] += 1
+    else
+        let s:cache_logs_backup_current_id[a:p_logPath] = 0
+    endif
+
+    return a:p_logPath.s:cache_logs_backup_prefix.string(s:cache_logs_backup_current_id[a:p_logPath])
+endfunction
+
+
+function s:getBackupDestinationDir(p_logPath)
+    let l:dirProposal = s:getBackupDestinationDirProposal(a:p_logPath)
+    while isdirectory(l:dirProposal)
+        let l:dirProposal = s:getBackupDestinationDirProposal(a:p_logPath)
+    endwhile
+
+    return l:dirProposal
+endfunction
+
+
+function s:backupPreviousLogs(p_logPath)
+    if isdirectory(a:p_logPath)
+        call system('mv -f '.a:p_logPath.' '.s:getBackupDestinationDir(a:p_logPath))
+    endi
+endfunction
+"}}}
 
 function s:buildAndRun(p_testcase)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
+
+    call s:backupPreviousLogs(s:getPathToLogs(a:p_testcase))
     execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags()
 endfunction
 "}}}
