@@ -8,8 +8,6 @@ let s:parameters = {
             \ g:common : getcwd().'/C_Test/cplane_k3/src/Common'
             \ }
 
-let s:path_CTest = getcwd().'/C_Test'
-
 let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.ttcn3'
 let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr '
@@ -37,6 +35,6 @@ function cplane#sct#fgrep#Execute(p_pattern)
     endif
 endfunction
 
-function cplane#sct#fgrep#CTests(p_pattern)
-    execute manager#utils#GetFGrepCmd(a:p_pattern, s:path_CTest, s:grepFlags)
+function cplane#sct#fgrep#from(p_path, p_pattern)
+    execute manager#utils#GetFGrepCmd(a:p_pattern, a:p_path, s:grepFlags)
 endfunction

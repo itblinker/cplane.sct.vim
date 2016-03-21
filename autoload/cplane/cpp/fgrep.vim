@@ -8,8 +8,6 @@ let s:parameters = {
             \ g:lom    : getcwd().'/C_Application/SC_LOM',
             \ g:common : getcwd().'/C_Application/SC_Common'
             \ }
-let s:path_CApplication = getcwd().'/C_Application'
-
 let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h --include=*.mk '
 let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr '
@@ -40,6 +38,6 @@ function cplane#cpp#fgrep#Execute(p_pattern)
 endfunction
 
 
-function cplane#cpp#fgrep#CApplication(p_pattern)
-    execute manager#utils#GetFGrepCmd(a:p_pattern, s:path_CApplication, s:grepFlags)
+function cplane#cpp#fgrep#from(p_path, p_pattern)
+    execute manager#utils#GetFGrepCmd(a:p_pattern, a:p_path, s:grepFlags)
 endfunction
