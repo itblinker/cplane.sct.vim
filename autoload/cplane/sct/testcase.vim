@@ -21,8 +21,16 @@ let s:common_flags = ' -basket ALL '
 let s:compilation_flags = ' -k3conly '.s:common_flags
 let s:build_flags = ' -keeplogs -keepk3log '.s:common_flags
 
-"{{{ cache
-let s:lastTestCase = ''
+"{{{ cache - last compialtion
+let s:lastTestCaseData = {}
+
+function s:fetchLastCompile()
+    return s:lastTestCaseData
+endfunction
+
+function s:storeDataOfLastCompilation(p_testcase, p_variant)
+    let s:lastTestCaseData = {'testcase': a:p_testcase, 'variant': a:p_variant}
+endfunction
 "}}}
 "{{{ local functions
 function s:getPathToLogsTopDir(p_variant)
@@ -72,15 +80,15 @@ endfunction
 
 
 function s:storeParametersForK3(p_component, p_logPath, p_testcase)
-    let g:cplane#cache#k3parameters[a:p_testcase] = [a:p_component, a:p_logPath, a:p_testcase]
+    call add(g:cplane#cache#k3parameters, [a:p_component, a:p_logPath, a:p_testcase])
 endfunction
 
 function s:fetchParametersForK3()
-    return values(g:cplane#cache#k3parameters)
+    return g:cplane#cache#k3parameters
 endfunction
 
 function s:eraseUsedK3Parameters()
-    let g:cplane#cache#k3parameters = {}
+    let g:cplane#cache#k3parameters = []
 endfunction
 
 
@@ -125,7 +133,7 @@ endfunction
 function s:buildAndRun(p_testcase, p_variant)
     let l:SC = cplane#sct#component#GetNameFromBuffer()
 
-    call s:backupPreviousLogs(s:getPathToLogs(a:p_variant, a:p_testcase))
+
     execute 'Dispatch '.s:getBin(l:SC).' -tcs '.a:p_testcase.s:getBuildAndRunFlags(a:p_variant)
 endfunction
 
@@ -142,26 +150,32 @@ endfunction
 function s:GetVariantFromUser()
     let l:valid = 0
     while l:valid == 0
-        let l:variant = input('[fsmr3][fsmr4][ddfsmr3][tddfsmr4] ? : ')
+        let l:variant = input('[fsmr3][fsmr4][tddfsmr3][tddfsmr4] ? : ')
         let l:valid = s:isVariantValid(l:variant)
     endwhile
-    
     return l:variant
 endfunction
 "}}}
-
-function cplane#sct#testcase#Valid()
-    execute 'echo ''variant is '.s:GetVariantFromUser().''''
-endfunction
-
 "}}}
+
+function cplane#sct#testcase#EchoParametersForKeptTestcase()
+    let l:data = s:fetchLastCompile()
+    if len(l:data)
+        execute 'echo ''testcase: '.l:data.testcase.' | variant: '.l:data.variant.''''
+    else
+        execute 'echo ''data has not been stored! please compile/build some testcase first'''
+    endif
+endfunction
 
 
 function cplane#sct#testcase#CompileFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
+
     if(len(l:testcase))
-        let s:lastTestCase = l:testcase
-        call s:compile(l:testcase, s:GetVariantFromUser())
+        let l:variant = s:GetVariantFromUser()
+        call s:compile(l:testcase, l:variant)
+
+        call s:storeDataOfLastCompilation(l:testcase, l:variant)
     else
         execute 'echo ''compilation failed: move cursor on line with testcase name'' '
     endif
@@ -169,22 +183,43 @@ endfunction
 
 
 function cplane#sct#testcase#CompileLastOne()
-    if len(s:lastTestCase)
-        call s:compile(l:lastTestCase, cplane#variant#Get())
+    if len(s:fetchLastCompile())
+        call s:compile(s:fetchLastCompile().testcase, s:fetchLastCompile().variant)
     else
-        execute 'echo ''compilation failed: no previous compile tests'' '
+        execute 'echo ''compilation failed: there is no  previous compile/build'' '
     endif
 endfunction
 
 
 function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
+
     if(len(l:testcase))
         let l:variant = s:GetVariantFromUser()
-        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), s:getPathToLogs(l:variant, l:testcase), l:testcase)
+        let l:logPath = s:getPathToLogs(l:variant, l:testcase)
+
+        call s:backupPreviousLogs(l:logPath)
         call s:buildAndRun(l:testcase, l:variant)
+        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), l:logPath, l:testcase)
+
+        call s:storeDataOfLastCompilation(l:testcase, l:variant)
     else
         execute 'echo ''build and run failed: move cursor on line with testcase name'' '
+    endif
+endfunction
+
+
+function cplane#sct#testcase#BuildAndRunLastOne()
+    if len(s:fetchLastCompile())
+        let l:variant = s:fetchLastCompile().variant
+        let l:testcase = s:fetchLastCompile().testcase
+        let l:logPath = s:getPathToLogs(l:variant, l:testcase)
+
+        call s:backupPreviousLogs(l:logPath)
+        call s:buildAndRun(l:testcase, l:variant)
+        call s:storeParametersForK3(cplane#sct#component#GetNameFromBuffer(), l:logPath, l:testcase)
+    else
+        execute 'echo ''build & run failed: there is no  previous compile/build'' '
     endif
 endfunction
 
@@ -201,3 +236,4 @@ function cplane#sct#testcase#ProcessBuildedTestCases()
         execute 'echo ''pool of testcases to process by k3 post processor is empty, run testcase first'' '
     endif
 endfunction
+
