@@ -68,7 +68,6 @@ function s:execute(p_component)
 
     call s:removePreviousListOfFilesToTag()
     call s:createListOfFilesToTag(a:p_component)
-    call cplane#UpSack()
 
     execute 'Start -wait=''error'' ctags-with-ttcn -f '.s:ctagFile.' --language-force=ttcn -L '.s:tempFileToStoreSources
     execute 'set tag='.s:ctagFile

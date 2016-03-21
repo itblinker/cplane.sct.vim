@@ -68,8 +68,7 @@ function s:execute(p_component)
     call s:createListOfFilesToTag(a:p_component)
     call s:appendFilesFromSymlinksToTagginList(s:symlinksDir)
 
-    call cplane#UpSack()
-    execute 'Start -wait=''always'' gtags -f '.s:tempFileToStoreSources
+    execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
 endfunction
 
 

@@ -10,6 +10,5 @@ let s:configs = [
 function cplane#cpp#make#MakeForBothFsmr(p_target)
     for cf in s:configs
         execute 'Make '.a:p_target.' CFG='.cf
-        execute 'Copen!'
     endfor
 endfunction
