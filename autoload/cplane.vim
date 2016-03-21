@@ -24,13 +24,27 @@ function cplane#Retag()
     if(filetype ==# 'cpp')
         call cplane#cpp#tags#Update()
         return
-
     elseif (l:filetype == 'ttcn')
         call cplane#sct#tags#Update()
         return
-
     else
         execute 'echo ''retag cannot be performed outside from cpp/ttcn files'''
     endif
 endfunction
+
+
+function cplane#FgrepInComponent(p_pattern)
+    let l:filetype = $filetype
+
+    if (l:filetype ==# 'cpp')
+        call cplane#cpp#fgrep#from(a:p_pattern)
+        return
+    elseif (l:filetype == 'ttcn')
+        call cplane#sct#fgrep#from(a:p_pattern)
+        return 
+    else
+        execute 'echo ''component ftrep  cannot be performed outside from cpp/ttcn files'''
+    endif
+endfunction
+
 "}}}
