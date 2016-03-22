@@ -8,6 +8,7 @@ let s:parameters = {
             \ g:lom    : getcwd().'/C_Application/SC_LOM',
             \ g:common : getcwd().'/C_Application/SC_Common'
             \ }
+
 let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h --include=*.mk '
 let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr '
@@ -30,7 +31,6 @@ function cplane#cpp#fgrep#Execute(p_pattern)
     let l:path = s:getPath(l:sc)
 
     if len(l:path)
-        execute 'echomsg ''path is '''.l:path
         execute manager#utils#GetFGrepCmd(a:p_pattern, l:path, s:grepFlags)
     else
         execute 'echo ''code grep error! unknown component source'' '

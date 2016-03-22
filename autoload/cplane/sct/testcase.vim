@@ -147,10 +147,10 @@ function s:isVariantValid(p_variant)
 endfunction
 
 
-function s:GetVariantFromUser()
+function s:GetVariantFromUser(p_info)
     let l:valid = 0
     while l:valid == 0
-        let l:variant = input('[fsmr3][fsmr4][tddfsmr3][tddfsmr4] ? : ')
+        let l:variant = input(a:p_info.' '.'[fsmr3][fsmr4][tddfsmr3][tddfsmr4] ? : ')
         let l:valid = s:isVariantValid(l:variant)
     endwhile
     return l:variant
@@ -172,7 +172,7 @@ function cplane#sct#testcase#CompileFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
 
     if(len(l:testcase))
-        let l:variant = s:GetVariantFromUser()
+        let l:variant = s:GetVariantFromUser('compile')
         call s:compile(l:testcase, l:variant)
 
         call s:storeDataOfLastCompilation(l:testcase, l:variant)
@@ -195,7 +195,7 @@ function cplane#sct#testcase#BuildAndRunFromCursorLine()
     let l:testcase = s:getTestCaseFromCursorLine()
 
     if(len(l:testcase))
-        let l:variant = s:GetVariantFromUser()
+        let l:variant = s:GetVariantFromUser('run')
         let l:logPath = s:getPathToLogs(l:variant, l:testcase)
 
         call s:backupPreviousLogs(l:logPath)
