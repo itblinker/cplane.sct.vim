@@ -68,6 +68,7 @@ function s:processing(p_sc, p_path, p_testcase)
     call s:clearAndPrepareDirs(a:p_path)
 
     execute s:getCmd(a:p_sc, a:p_path).' --force-tree --no-functions --no-user-logs --no-wait-for --no-timestamps --no-content --out='.l:dDir.'/flow'
+    execute s:getCmd(a:p_sc, a:p_path).' --force-tree --no-functions --no-user-logs --no-wait-for --timestamps --no-content --out='.l:dDir.'/flow.time'
     execute s:getCmd(a:p_sc, a:p_path).' --force-tree --no-functions --user-logs --no-wait-for --no-timestamps --no-content --out='.l:dDir.'/logs.flow'
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --no-user-logs --no-wait-for --no-timestamps --content --out='.l:dDir.'/flow.messages'
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --user-logs --no-wait-for --no-timestamps --content --out='.l:dDir.'/logs.flow.messages'

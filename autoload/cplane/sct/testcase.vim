@@ -47,11 +47,19 @@ function s:getPathToLogs(p_variant, p_testcaseName)
 endfunction
 
 
+function s:cutOffBraces(p_string)
+    let l:copy = a:p_string
+    let l:copy = substitute(l:copy, ')', '', 'g')
+    let l:copy = substitute(l:copy, '(', '', 'g')
+    return l:copy
+endfunction
+
+
 function s:getTestCaseFromCursorLine()
     let l:words = split(getline('.'))
 
     if( (len(l:words) >= 2) && (l:words[0] == 'testcase') )
-        return strpart(l:words[1], 0, len(l:words[1]) - 2)
+        return s:cutOffBraces(l:words[1])
     else
         return ''
     endif
