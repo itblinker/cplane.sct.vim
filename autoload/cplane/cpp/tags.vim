@@ -100,7 +100,7 @@ function cplane#cpp#tags#Update()
         call maktaba#ensure#IsTrue(cplane#cpp#component#IsSupported(l:currentOne))
         call s:execute(l:currentOne)
     catch
-        call maktaba#error#Shout('cplane.vim: cann''t tag the component resolved as %s', l:currentOne)
+        call maktaba#error#Shout('cplane.vim: cann''t tag the sources for component resolved as %s (check if is buffer is from ../C_Application/.. or ../C_Test/.. )', l:currentOne)
     endtry
 endfunction
 
