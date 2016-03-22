@@ -53,7 +53,7 @@ let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
             call s:validateListOfPaths(s:common_sacks)
             call s:validateListOfPaths(s:symlinksDir)
         catch
-            call maktaba#error#Shout('some paths for gtags are unknown, please check '.expand('<sfile>:p'))
+            call maktaba#error#Shout('some paths for gtags are unknown, please check (cplane open grok symlink?)'))
         endtry
     endfunction
 
