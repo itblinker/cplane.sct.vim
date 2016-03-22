@@ -33,7 +33,7 @@ function cplane#Retag()
 endfunction
 
 
-function cplane#FgrepInComponent(p_pattern)
+function cplane#RFgrepInComponent(p_pattern)
     let l:filetype = &filetype
 
     if (l:filetype ==# 'cpp')
