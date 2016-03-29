@@ -5,7 +5,7 @@ if !s:enter
 endif
 "}}}
 
-command CplaneUpSack : call cplane#UpSack()
+command CplaneGenSack : call cplane#GenSack()
 command -nargs=1 CplaneMakeForBothFsmr : call cplane#cpp#make#MakeForBothFsmr(<f-args>)
 
 command CplaneAutoTagON  : call cplane#AutoTagON()

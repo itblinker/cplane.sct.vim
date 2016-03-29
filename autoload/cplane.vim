@@ -12,8 +12,8 @@ endfunction
 "}}}
 
 
-function cplane#UpSack()
-    execute 'Start! -wait=''error'' make upSack'
+function cplane#GenSack()
+    execute 'Start! -wait=''error'' make genSack'
 endfunction
 
 
