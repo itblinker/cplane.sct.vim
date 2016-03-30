@@ -33,7 +33,11 @@ let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
 
 
     function s:validatePath(p_path)
-        call maktaba#ensure#IsDirectory(a:p_path)
+        try
+            call maktaba#ensure#IsDirectory(a:p_path)
+        catch
+            call maktaba#error#Shout('cplane.vim, taggin: cannot find path: '.a:p_path)
+        endtry
     endfunction
 
 
@@ -45,16 +49,12 @@ let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
 
 
     function s:validatePaths()
-        try
-            for key in keys(s:parameters)
-                call s:validateListOfPaths(s:getListOfPathsForComponent(key))
-            endfor
+        for key in keys(s:parameters)
+            call s:validateListOfPaths(s:getListOfPathsForComponent(key))
+        endfor
 
-            call s:validateListOfPaths(s:common_sacks)
-            call s:validateListOfPaths(s:symlinksDir)
-        catch
-            call maktaba#error#Shout('some paths for gtags are unknown, please check (cplane open grok symlink?)'))
-        endtry
+        call s:validateListOfPaths(s:common_sacks)
+        call s:validateListOfPaths(s:symlinksDir)
     endfunction
 
     "}}}
