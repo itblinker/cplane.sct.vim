@@ -22,9 +22,11 @@ function cplane#Retag()
     let l:filetype = &filetype
 
     if(filetype ==# 'cpp')
+        call cplane#GenSack()
         call cplane#cpp#tags#Update()
         return
     elseif (l:filetype ==# 'ttcn')
+        call cplane#GenSack()
         call cplane#sct#tags#Update()
         return
     else

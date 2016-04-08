@@ -1,3 +1,4 @@
+
 execute 'nnoremap <buffer> <F5>  :call cplane#sct#testcase#CompileFromCursorLine()<CR>'
 execute 'nnoremap <buffer> <F6>  :call cplane#sct#testcase#BuildAndRunFromCursorLine()<CR>'
 

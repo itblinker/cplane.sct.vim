@@ -5,15 +5,17 @@ if !s:enter
 endif
 "}}}
 
-command CplaneGenSack : call cplane#GenSack()
-command -nargs=1 CplaneMakeForBothFsmr : call cplane#cpp#make#MakeForBothFsmr(<f-args>)
+command GenSack : call cplane#GenSack()
 
-command CplaneAutoTagON  : call cplane#AutoTagON()
-command CplaneAutoTagOFF : call cplane#AutoTagOFF()
+command -nargs=1 MakeFsmr3 : call cplane#cpp#make#MakeFsmr3(<f-args>)
+command -nargs=1 MakeFsmr4 : call cplane#cpp#make#MakeFsmr4(<f-args>)
 
-command -nargs=* -complete=file  CplaneCodeRFGrepFromPath : call cplane#cpp#fgrep#from(<f-args>)
-command -nargs=* -complete=file  CplaneSctRFGrepFromPath  : call cplane#sct#fgrep#from(<f-args>)
+command AutoTagON  : call cplane#AutoTagON()
+command AutoTagOFF : call cplane#AutoTagOFF()
 
-command -nargs=1 CplaneRFGrepInComponent  : call cplane#RFgrepInComponent(<f-args>)
+command -nargs=* -complete=file  RFCppGrepFromPath : call cplane#cpp#fgrep#from(<f-args>)
+command -nargs=* -complete=file  RFTtcnGrepFromPath  : call cplane#sct#fgrep#from(<f-args>)
 
-command CplaneEchoSctRunnerKeptData : call cplane#sct#testcase#EchoParametersForKeptTestcase()
+command -nargs=1 RFGrepCplaneComponent  : call cplane#RFgrepInComponent(<f-args>)
+
+command EchoSctRunnerKeptData : call cplane#sct#testcase#EchoParametersForKeptTestcase()
