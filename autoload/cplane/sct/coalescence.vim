@@ -5,9 +5,11 @@ let s:configMap = {
             \ g:fsmr4_tdd  : '.configtddfsmr4'
             \ }
 
+
 function s:getSensitiveFlags(p_variant)
     let l:flags = '--retries 1 --failed-limit 2 --config '.s:configMap[a:p_variant]'
 endfunction
+
 
 function s:executor(p_sc, p_variant, flags)
     try
@@ -19,6 +21,7 @@ function s:executor(p_sc, p_variant, flags)
     endtry
 endfunction
 
+
 function cplane#sct#coalescence#ExecuteForCurrentConfig(p_variant)
     let l:sc = cplane#sct#coalescence#ExecuteForCurrentConfig()
     if len(l:sc)
@@ -26,4 +29,3 @@ function cplane#sct#coalescence#ExecuteForCurrentConfig(p_variant)
         execute 'echo ''coalescence must be run from target specific path'''
     endif
 endfunction
-

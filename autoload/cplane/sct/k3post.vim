@@ -72,7 +72,7 @@ function s:processing(p_sc, p_path, p_testcase)
     "execute s:getCmd(a:p_sc, a:p_path).' --force-tree --no-functions --user-logs --no-wait-for --no-timestamps --no-content --out='.l:dDir.'/logs.flow'
     "execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --no-user-logs --no-wait-for --no-timestamps --content --out='.l:dDir.'/flow.messages'
     "execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --user-logs --no-wait-for --no-timestamps --content --out='.l:dDir.'/logs.flow.messages'
-    execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --no-user-logs --wait-for --timestamps --content --out='.l:dDir.'/messages.flow.time'
+    "execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --no-user-logs --wait-for --timestamps --content --out='.l:dDir.'/messages.flow.time'
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --no-functions --user-logs --wait-for --timestamps --content --out='.l:dDir.'/messages.flow.time.logs'
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --functions --no-function-indent --user-logs --wait-for --timestamps --out='.l:dDir.'/k3FullyProcessed'
     execute s:getCmd(a:p_sc, a:p_path).'--force-tree --functions --no-function-indent --user-logs --wait-for --timestamps --split-log --out='.l:sDir.'/out'
