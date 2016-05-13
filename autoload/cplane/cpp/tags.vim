@@ -17,8 +17,20 @@ let s:parameters = {
             \ g:common : [getcwd().'/C_Application/SC_Common']
             \ }
 
-let s:find_arg = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
+
 let s:tempFileToStoreSources = '.cache.gtags.cpp.sources'
+"let s:find_arg_with_UTs = ' -name ''*.cpp'' -o -name ''*.hpp'' -o -name ''*.h'' -o -name ''*.c'' '
+
+let s:find_arg_with_UTs = ' -type f \( -iname ''*.cpp'' -o -iname ''*.hpp'' -o -iname ''*.h'' -o -iname ''*.c'' \) '
+let s:find_arg_without_UTs = ' -type f \( -iname ''*.cpp'' -o -iname ''*.hpp'' -o -iname ''*.h'' -o -iname ''*.c'' \) \! -path ''*Test_module*'' '
+
+function s:getFindArguments()
+    if (g:tag_cpp_with_tests == 1)
+        return s:find_arg_with_UTs
+    else
+        return s:find_arg_without_UTs
+    endif
+endfunction
 
 "{{{ One-Time Path Validation
     "{{{ validation methods
@@ -75,14 +87,16 @@ endfunction
 function s:createListOfFilesToTag(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
     for path in l:listOfAllNeededPaths
-        execute 'Start! find '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
+        let l:cmd = 'Start! find '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
+        execute l:cmd
     endfor
 endfunction
 
 
 function s:appendFilesFromSymlinksToTagginList(p_listOfPaths)
     for path in a:p_listOfPaths
-        execute 'Start! find -L '.path.' '.s:find_arg.' >> '.s:tempFileToStoreSources
+        let l:cmd = 'Start! find -L '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
+        execute l:cmd
     endfor
 endfunction
 
