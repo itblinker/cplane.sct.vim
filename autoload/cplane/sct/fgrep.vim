@@ -37,7 +37,7 @@ function cplane#sct#fgrep#Execute(p_pattern)
 endfunction
 
 
-function cplane#sct#fgrep#from(p_path, p_pattern)
+function cplane#sct#fgrep#from(...)
     if a:0 == 2
         execute manager#utils#GetFGrepCmd(a:1, a:2, s:grepFlags)
     else
