@@ -11,7 +11,7 @@ let s:parameters = {
 
 let s:arg_common = ' -inHr '
 let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h --include=*.mk '
-let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr '
+let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr --exclude-dir=*Test_module*'
 
 let s:grepFlags = s:arg_common.s:arg_include.s:arg_exclude
 
@@ -38,6 +38,10 @@ function cplane#cpp#fgrep#Execute(p_pattern)
 endfunction
 
 
-function cplane#cpp#fgrep#from(p_path, p_pattern)
-    execute manager#utils#GetFGrepCmd(a:p_pattern, a:p_path, s:grepFlags)
+function cplane#cpp#fgrep#from(...)
+    if a:0 == 2
+        execute manager#utils#GetFGrepCmd(a:1, a:2, s:grepFlags)
+    else
+        execute manager#utils#GetFGrepCmd(a:1, getcwd(), s:grepFlags)
+    endif
 endfunction

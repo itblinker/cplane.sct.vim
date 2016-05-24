@@ -24,6 +24,7 @@ function s:getPath(p_component)
 endfunction
 "}}}
 
+
 function cplane#sct#fgrep#Execute(p_pattern)
     let l:sc = cplane#sct#component#GetNameFromBuffer()
     let l:path = s:getPath(l:sc)
@@ -35,6 +36,11 @@ function cplane#sct#fgrep#Execute(p_pattern)
     endif
 endfunction
 
+
 function cplane#sct#fgrep#from(p_path, p_pattern)
-    execute manager#utils#GetFGrepCmd(a:p_pattern, a:p_path, s:grepFlags)
+    if a:0 == 2
+        execute manager#utils#GetFGrepCmd(a:1, a:2, s:grepFlags)
+    else
+        execute manager#utils#GetFGrepCmd(a:1, getcwd(), s:grepFlags)
+    endif
 endfunction
