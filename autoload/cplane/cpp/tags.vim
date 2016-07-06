@@ -3,7 +3,8 @@ let s:symlinksDir = [
             \  ]
 
 let s:common_sacks = [
-            \ getcwd().'/lteDo'
+            \ getcwd().'/lteDo/gencode',
+            \ getcwd().'/lteDo/C_Application'
             \ ]
 
 let s:parameters = {

@@ -10,7 +10,7 @@ let s:parameters = {
             \ }
 
 let s:arg_common = ' -inHr '
-let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h --include=*.mk '
+let s:arg_include =' --include=*.cpp --include=*.hpp --include=*.c --include=*.h '
 let s:arg_exclude = ' --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.bzr --exclude-dir=*Test_module*'
 
 let s:grepFlags = s:arg_common.s:arg_include.s:arg_exclude
