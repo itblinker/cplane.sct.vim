@@ -7,11 +7,11 @@ endif
 
 "{{{ gtag file selection UT/noUT
 function s:gtagOnlyCode()
-        let g:tag_cpp_with_tests = 1
+        let g:tag_cpp_with_tests = 0
 endfunction
 
 function s:gtagCodeAndUTs()
-        let g:tag_cpp_with_tests = 0
+        let g:tag_cpp_with_tests = 1
 endfunction
 
 call s:gtagOnlyCode()
