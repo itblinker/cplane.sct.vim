@@ -6,15 +6,25 @@ endif
 "}}}
 
 "{{{ gtag file selection UT/noUT
-function s:gtagOnlyCode()
+function s:gtagSetTagginOption(p_tagOption)
+    if(a:p_tagOption)
+        let g:tag_cpp_with_tests = 1
+    else
         let g:tag_cpp_with_tests = 0
+    endif
+endfunction
+
+function s:gtagOnlyCode()
+    call s:gtagSetTagginOption(0)
+    call cplane#Retag()
 endfunction
 
 function s:gtagCodeAndUTs()
-        let g:tag_cpp_with_tests = 1
+    call s:gtagSetTagginOption(1)
+    call cplane#Retag()
 endfunction
 
-call s:gtagOnlyCode()
+call s:gtagSetTagginOption(0)
 "}}}
 
 

@@ -81,14 +81,16 @@ function s:execute(p_component)
     call s:createListOfFilesToTag(a:p_component)
     call s:appendFilesFromSymlinksToTagginList(s:symlinksDir)
 
-    execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
+    "execute 'Start -wait=''error'' gtags -f '.s:tempFileToStoreSources
+    execute 'Spawn! gtags -f '.s:tempFileToStoreSources
 endfunction
 
 
 function s:createListOfFilesToTag(p_component)
     let l:listOfAllNeededPaths = s:getListOfPathsForComponent(a:p_component) + s:common_sacks
     for path in l:listOfAllNeededPaths
-        let l:cmd = 'Start! find '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
+        "let l:cmd = 'Start! find '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
+        let l:cmd = 'Spawn! find '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
         execute l:cmd
     endfor
 endfunction
@@ -96,7 +98,8 @@ endfunction
 
 function s:appendFilesFromSymlinksToTagginList(p_listOfPaths)
     for path in a:p_listOfPaths
-        let l:cmd = 'Start! find -L '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
+        let l:cmd = 'Spawn! find -L '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
+        "let l:cmd = 'Start! find -L '.path.' '.s:getFindArguments().' >> '.s:tempFileToStoreSources
         execute l:cmd
     endfor
 endfunction
@@ -104,7 +107,8 @@ endfunction
 
 function s:removePreviousListOfFiles()
     if filereadable(s:tempFileToStoreSources)
-        execute 'Start -wait rm -f '.s:tempFileToStoreSources
+        execute 'Spawn! rm -f '.s:tempFileToStoreSources
+        "execute 'Start -wait rm -f '.s:tempFileToStoreSources
     endif
 endfunction
 "}}}
