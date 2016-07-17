@@ -17,13 +17,23 @@ function s:svnGreenUpdater(p_target)
     call system('svn up -r '.l:revision)
 endfunction
 
+let s:cache_last_make_target =''
+
+function s:cacheMakeTarget(p_target)
+    let s:cache_last_make_target = a:p_target
+endfunction
+
+function cplane#cpp#make#getCachedMakeTarget()
+    return s:cache_last_make_target
+endfunction
 
 function cplane#cpp#make#MakeFsmr3(p_target)
+    call s:cacheMakeTarget(a:p_target)
     call s:builder(a:p_target, s:configs.fsmr3)
 endfunction
 
-
 function cplane#cpp#make#MakeFsmr4(p_target)
+    call s:cacheMakeTarget(a:p_target)
     call s:builder(a:p_target, s:configs.fsmr4)
 endfunction
 

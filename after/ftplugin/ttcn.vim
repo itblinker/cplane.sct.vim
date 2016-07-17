@@ -1,6 +1,6 @@
 
-execute 'nnoremap <buffer> <F3>  :call cplane#sct#testcase#CompileFromCursorLine()<CR>'
-execute 'nnoremap <buffer> <F4>  :call cplane#sct#testcase#CompileLastOne()<CR>'
+execute 'nnoremap <buffer> <F4>  :call cplane#sct#testcase#CompileFromCursorLine()<CR>'
+execute 'nnoremap <buffer> <F5>  :call cplane#sct#testcase#CompileLastOne()<CR>'
 
 execute 'nnoremap <buffer> <F6>  :call cplane#sct#testcase#BuildAndRunFromCursorLine()<CR>'
 execute 'nnoremap <buffer> <F7>  :call cplane#sct#testcase#BuildAndRunLastOne()<CR>'

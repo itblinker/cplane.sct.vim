@@ -36,8 +36,8 @@ command -nargs=1 CplaneMakeFsmr4 : call cplane#cpp#make#MakeFsmr4(<f-args>)
 command CplaneGtagCode : call s:gtagOnlyCode()
 command CplaneGtagCodeAndTests : call s:gtagCodeAndUTs()
 
-command CplaneAutoTagON  : call cplane#AutoTagON()
-command CplaneAutoTagOFF : call cplane#AutoTagOFF()
+"command CplaneAutoTagON  : call cplane#AutoTagON()
+"command CplaneAutoTagOFF : call cplane#AutoTagOFF()
 
 command -nargs=* -complete=file  CplaneSniffKeywordCpp : call cplane#cpp#fgrep#from(<f-args>)
 command -nargs=* -complete=file  CplaneSniffKeywordTtcn  : call cplane#sct#fgrep#from(<f-args>)
